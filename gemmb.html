@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GEMMB 全局监控 | ITHub — Logicalis 网赢</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            dark: '#030712',
+                            card: '#0F172A',
+                            surface: '#1E293B',
+                            primary: '#00F0FF',
+                            secondary: '#3B82F6',
+                            accent: '#8B5CF6',
+                            success: '#10B981',
+                            warning: '#F59E0B'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #030712; color: #F8FAFC; overflow-x: hidden; }
+        .text-gradient { background: linear-gradient(135deg, #00F0FF 0%, #3B82F6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .text-gradient-accent { background: linear-gradient(135deg, #8B5CF6 0%, #00F0FF 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .bg-gradient-glass { background: linear-gradient(145deg, rgba(15, 23, 42, 0.8) 0%, rgba(3, 7, 18, 0.9) 100%); backdrop-filter: blur(16px); }
+        .border-glow { border: 1px solid rgba(0, 240, 255, 0.15); box-shadow: inset 0 0 20px rgba(0, 240, 255, 0.02), 0 0 15px rgba(0, 240, 255, 0.05); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .border-glow:hover { border-color: rgba(0, 240, 255, 0.6); box-shadow: inset 0 0 20px rgba(0, 240, 255, 0.05), 0 0 30px rgba(0, 240, 255, 0.2); transform: translateY(-4px); }
+        .border-glow-blue { border: 1px solid rgba(59, 130, 246, 0.2); box-shadow: inset 0 0 20px rgba(59, 130, 246, 0.02), 0 0 15px rgba(59, 130, 246, 0.05); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .border-glow-blue:hover { border-color: rgba(59, 130, 246, 0.6); box-shadow: inset 0 0 20px rgba(59, 130, 246, 0.05), 0 0 30px rgba(59, 130, 246, 0.2); transform: translateY(-4px); }
+        .bg-grid-pattern { background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%231E293B' fill-opacity='0.4' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E"); }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #030712; }
+        ::-webkit-scrollbar-thumb { background: #1E293B; border-radius: 4px; }
+        .nav-glass { background: rgba(3, 7, 18, 0.85); backdrop-filter: blur(20px); }
+
+        /* ===== LIGHT THEME ===== */
+        body.theme-light { background-color: #F8FAFC; color: #1E293B; }
+        body.theme-light .bg-grid-pattern { background-image: none !important; }
+        body.theme-light .text-gradient { background: linear-gradient(135deg, #0284C7 0%, #2563EB 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        body.theme-light .text-gradient-accent { background: linear-gradient(135deg, #7C3AED 0%, #0284C7 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        body.theme-light .text-gradient-red { background: linear-gradient(135deg, #DC2626 0%, #EA580C 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        body.theme-light .nav-glass { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px); border-color: #E2E8F0; }
+        body.theme-light .bg-gradient-glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(16px); }
+        body.theme-light .border-glow { border-color: rgba(0, 0, 0, 0.08); box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04); }
+        body.theme-light .border-glow:hover { border-color: rgba(37, 99, 235, 0.3); box-shadow: 0 4px 20px rgba(37, 99, 235, 0.1); }
+        body.theme-light .border-glow-blue { border-color: rgba(0, 0, 0, 0.08); box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+        body.theme-light .border-glow-blue:hover { border-color: rgba(37, 99, 235, 0.3); box-shadow: 0 4px 20px rgba(37, 99, 235, 0.1); }
+        body.theme-light .border-glow-accent { border-color: rgba(0, 0, 0, 0.08); box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+        body.theme-light .border-glow-accent:hover { border-color: rgba(124, 58, 237, 0.3); box-shadow: 0 4px 20px rgba(124, 58, 237, 0.1); }
+        body.theme-light .border-glow-warning { border-color: rgba(0, 0, 0, 0.08); box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+        body.theme-light .border-glow-warning:hover { border-color: rgba(217, 119, 6, 0.3); box-shadow: 0 4px 20px rgba(217, 119, 6, 0.1); }
+        body.theme-light .border-glow-success { border-color: rgba(0, 0, 0, 0.08); box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+        body.theme-light .border-glow-success:hover { border-color: rgba(5, 150, 105, 0.3); box-shadow: 0 4px 20px rgba(5, 150, 105, 0.1); }
+        body.theme-light .border-glow-cyan { border-color: rgba(0, 0, 0, 0.08); box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+        body.theme-light .border-glow-cyan:hover { border-color: rgba(6, 182, 212, 0.3); box-shadow: 0 4px 20px rgba(6, 182, 212, 0.1); }
+        body.theme-light .border-glow-red { border-color: rgba(0, 0, 0, 0.08); box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+        body.theme-light .border-glow-red:hover { border-color: rgba(220, 38, 38, 0.3); box-shadow: 0 4px 20px rgba(220, 38, 38, 0.1); }
+        body.theme-light .text-white { color: #0F172A; }
+        body.theme-light .text-slate-300 { color: #475569; }
+        body.theme-light .text-slate-400 { color: #64748B; }
+        body.theme-light .text-slate-500 { color: #94A3B8; }
+        body.theme-light .text-slate-600 { color: #CBD5E1; }
+        body.theme-light .bg-brand-card, body.theme-light .bg-brand-card\/60, body.theme-light .bg-brand-card\/80, body.theme-light .bg-brand-card\/40 { background-color: #FFFFFF; }
+        body.theme-light .bg-brand-surface, body.theme-light .bg-brand-surface\/60, body.theme-light .bg-brand-surface\/30 { background-color: #F1F5F9; }
+        body.theme-light .bg-brand-dark { background-color: #F8FAFC; }
+        body.theme-light .bg-\[\#070D18\] { background-color: #F1F5F9; }
+        body.theme-light .bg-\[\#040914\] { background-color: #FFFFFF; }
+        body.theme-light .bg-\[\#0B1221\] { background-color: #F8FAFC; }
+        body.theme-light .border-slate-800, body.theme-light .border-slate-800\/60 { border-color: #E2E8F0; }
+        body.theme-light .border-slate-700, body.theme-light .border-slate-700\/50, body.theme-light .border-slate-700\/40, body.theme-light .border-slate-700\/30 { border-color: #E2E8F0; }
+        body.theme-light .divide-slate-700\/30 > :not([hidden]) ~ :not([hidden]) { border-color: #E2E8F0; }
+        body.theme-light .hover\:text-white:hover { color: #1E40AF; }
+        body.theme-light .hover\:bg-slate-800:hover { background-color: #F1F5F9; }
+        body.theme-light .hover\:bg-brand-surface\/30:hover { background-color: #F8FAFC; }
+        body.theme-light footer { background-color: #F8FAFC; border-color: #E2E8F0; }
+        body.theme-light footer .text-white { color: #0F172A; }
+        body.theme-light ::-webkit-scrollbar-track { background: #F8FAFC; }
+        body.theme-light ::-webkit-scrollbar-thumb { background: #CBD5E1; }
+        body.theme-light code { background-color: #F1F5F9; color: #1E293B; }
+
+        body.theme-light .border-slate-700\/40 { border-color: #E2E8F0; }
+        body.theme-light a.text-slate-400 { color: #64748B; }
+        body.theme-light a.text-slate-400:hover { color: #1E40AF; background-color: #F1F5F9; }
+    </style>
+</head>
+<body class="antialiased bg-grid-pattern min-h-screen">
+
+    <!-- ==================== TOP NAVIGATION ==================== -->
+    <nav class="nav-glass sticky top-0 z-50 border-b border-slate-800/60">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center h-14 gap-1 overflow-x-auto">
+                <a href="index.html" class="text-lg font-extrabold tracking-tight mr-4 whitespace-nowrap shrink-0">
+                    <span class="text-gradient">IT</span><span class="text-white">Hub</span>
+                </a>
+                <a href="index.html" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors whitespace-nowrap">首页</a>
+                <a href="platform.html" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors whitespace-nowrap">平台架构</a>
+                <a href="gemmb.html" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-brand-secondary/20 text-brand-secondary whitespace-nowrap">GEMMB 监控</a>
+                <a href="cmdb.html" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors whitespace-nowrap">CMDB 配置</a>
+                <a href="itsm.html" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors whitespace-nowrap">ITSM 服务</a>
+                <a href="automation.html" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors whitespace-nowrap">自动化 / AI</a>
+                <a href="integration.html" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors whitespace-nowrap">集成框架</a>
+                <a href="noc.html" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors whitespace-nowrap">统一运营服务</a>
+                <div class="ml-auto shrink-0 flex items-center gap-1 border-l border-slate-700/40 pl-3">
+                    <a href="gemmb.html" class="px-2 py-1 rounded text-[10px] font-semibold bg-brand-primary/20 text-brand-primary font-bold transition-colors whitespace-nowrap">简</a>
+                    <a href="tw/gemmb.html" class="px-2 py-1 rounded text-[10px] font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition-colors whitespace-nowrap">繁</a>
+                    <a href="EN/gemmb.html" class="px-2 py-1 rounded text-[10px] font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition-colors whitespace-nowrap">EN</a>
+                </div>
+                <button onclick="toggleTheme()" class="ml-auto shrink-0 w-8 h-8 rounded-lg flex items-center justify-center border border-slate-700/40 hover:border-brand-primary/40 transition-colors" title="切换主题" id="theme-toggle">
+                    <svg id="icon-moon" class="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                    <svg id="icon-sun" class="w-4 h-4 text-yellow-500 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ==================== HERO ==================== -->
+    <header class="relative pt-20 pb-16 overflow-hidden">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[1200px] h-[600px] opacity-15 pointer-events-none">
+            <div class="absolute inset-0 bg-gradient-to-br from-brand-secondary via-blue-600 to-cyan-500 blur-[150px] rounded-full mix-blend-screen"></div>
+        </div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="inline-flex items-center space-x-3 bg-brand-surface border border-slate-700/60 rounded-full px-5 py-2 mb-6 shadow-lg">
+                <span class="relative flex h-2.5 w-2.5">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-secondary opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-brand-secondary"></span>
+                </span>
+                <span class="text-[10px] md:text-xs font-bold tracking-[0.2em] text-slate-300 uppercase whitespace-nowrap">Global Enterprise Monitoring & Management Board</span>
+            </div>
+
+            <h1 class="text-4xl md:text-6xl lg:text-7xl font-black tracking-tight mb-6 leading-[1.1]">
+                GEMMB — 全局企业<br><span class="text-gradient">监控管理看板</span>
+            </h1>
+            <p class="text-lg md:text-xl text-slate-400 mb-12 leading-relaxed max-w-4xl mx-auto">
+                企业级实时 IT 运营监控，多站点/多区域统一管控。原生集成 <strong class="text-white">100+ 全球技术厂商</strong>，覆盖五大监控领域，消除全栈 ICT 基础架构的监控盲区。
+            </p>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+                <div class="bg-gradient-glass border-glow-blue rounded-2xl p-5 text-center">
+                    <div class="text-3xl md:text-4xl font-black text-brand-secondary">5</div>
+                    <div class="text-[10px] text-slate-500 uppercase tracking-wider font-bold mt-1">大监控领域</div>
+                </div>
+                <div class="bg-gradient-glass border-glow-blue rounded-2xl p-5 text-center">
+                    <div class="text-3xl md:text-4xl font-black text-brand-primary">100+</div>
+                    <div class="text-[10px] text-slate-500 uppercase tracking-wider font-bold mt-1">技术厂商集成</div>
+                </div>
+                <div class="bg-gradient-glass border-glow-blue rounded-2xl p-5 text-center">
+                    <div class="text-3xl md:text-4xl font-black text-brand-success">10+</div>
+                    <div class="text-[10px] text-slate-500 uppercase tracking-wider font-bold mt-1">监控采集协议</div>
+                </div>
+                <div class="bg-gradient-glass border-glow-blue rounded-2xl p-5 text-center">
+                    <div class="text-3xl md:text-4xl font-black text-brand-warning">100K+</div>
+                    <div class="text-[10px] text-slate-500 uppercase tracking-wider font-bold mt-1">设备纳管能力</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== BREADCRUMB ==================== -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div class="flex items-center gap-2 text-xs text-slate-500">
+            <a href="index.html" class="hover:text-brand-secondary transition-colors">首页</a>
+            <span>/</span>
+            <span class="text-brand-secondary font-semibold">GEMMB 全局监控</span>
+        </div>
+    </div>
+
+    <!-- ==================== 5 MONITORING DOMAINS ==================== -->
+    <section class="py-24 border-t border-slate-800 bg-[#070D18] relative overflow-hidden">
+        <div class="absolute left-0 top-1/4 w-[500px] h-[500px] bg-brand-secondary/5 rounded-full blur-[120px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16">
+                <div class="inline-flex items-center space-x-2 bg-brand-surface px-4 py-2 rounded-lg mb-4 border border-slate-700 shadow-md">
+                    <span class="text-brand-secondary font-bold tracking-widest text-xs uppercase">全域可观测性</span>
+                </div>
+                <h2 class="text-3xl md:text-5xl font-black mb-6 tracking-tight">五大监控<span class="text-gradient">领域</span></h2>
+                <p class="text-lg text-slate-400 max-w-4xl mx-auto">GEMMB 提供全域可观测性，覆盖企业 IT 基础架构的每一个层面。从网络设备到公有云，从安全防火墙到数据库，所有遥测数据汇聚在统一看板中。</p>
+            </div>
+
+            <!-- Domain 1: Network & SD-WAN -->
+            <div class="mb-8">
+                <div class="bg-gradient-glass border-glow-blue rounded-2xl p-8">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-xl bg-brand-secondary/20 flex items-center justify-center border border-brand-secondary/40 shrink-0">
+                            <svg class="w-6 h-6 text-brand-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-extrabold text-white">01 — 网络与 SD-WAN</h3>
+                            <p class="text-sm text-slate-400 mt-1">深度遥测采集覆盖企业路由、交换、无线控制器和 SD-WAN 编排器</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4">
+                            <h5 class="text-sm font-bold text-white mb-2">SNMP 主动轮询</h5>
+                            <p class="text-xs text-slate-400">支持 SNMP v2c/v3 协议，状态/统计/阈值三维监控，厂商无关设计。</p>
+                        </div>
+                        <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4">
+                            <h5 class="text-sm font-bold text-white mb-2">ICMP 可用性检测</h5>
+                            <p class="text-xs text-slate-400">实时连通性检测与延迟监控，支持 Trace Route 路径追踪。</p>
+                        </div>
+                        <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4">
+                            <h5 class="text-sm font-bold text-white mb-2">NetFlow / sFlow 流量分析</h5>
+                            <p class="text-xs text-slate-400">多维度流量分解：Top Talkers、Top Applications、Top Protocols。</p>
+                        </div>
+                        <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4">
+                            <h5 class="text-sm font-bold text-white mb-2">SD-WAN API 集成</h5>
+                            <p class="text-xs text-slate-400">原生 API 对接 Viptela vManage、Meraki、VeloCloud、Aruba 控制器。</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-brand-secondary/10 border border-brand-secondary/20 rounded-lg text-[11px] font-semibold text-brand-secondary">Cisco</span>
+                        <span class="px-3 py-1 bg-brand-secondary/10 border border-brand-secondary/20 rounded-lg text-[11px] font-semibold text-brand-secondary">Cisco Meraki</span>
+                        <span class="px-3 py-1 bg-brand-secondary/10 border border-brand-secondary/20 rounded-lg text-[11px] font-semibold text-brand-secondary">Juniper</span>
+                        <span class="px-3 py-1 bg-brand-secondary/10 border border-brand-secondary/20 rounded-lg text-[11px] font-semibold text-brand-secondary">Huawei</span>
+                        <span class="px-3 py-1 bg-brand-secondary/10 border border-brand-secondary/20 rounded-lg text-[11px] font-semibold text-brand-secondary">H3C</span>
+                        <span class="px-3 py-1 bg-brand-secondary/10 border border-brand-secondary/20 rounded-lg text-[11px] font-semibold text-brand-secondary">Aruba</span>
+                        <span class="px-3 py-1 bg-brand-secondary/10 border border-brand-secondary/20 rounded-lg text-[11px] font-semibold text-brand-secondary">Viptela</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domain 2: Security & Firewall -->
+            <div class="mb-8">
+                <div class="bg-gradient-glass border border-red-500/15 rounded-2xl p-8 hover:border-red-500/40 transition-all duration-300" style="box-shadow: 0 0 15px rgba(239,68,68,0.05);">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-xl bg-red-500/20 flex items-center justify-center border border-red-500/40 shrink-0">
+                            <svg class="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-extrabold text-white">02 — 安全与防火墙</h3>
+                            <p class="text-sm text-slate-400 mt-1">下一代防火墙、IDS/IPS 和安全策略网关的事件提取与 Syslog 解析</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4">
+                            <h5 class="text-sm font-bold text-white mb-2">Syslog 事件采集</h5>
+                            <p class="text-xs text-slate-400">安全日志加密 Relay 转发，支持合规冷备存储 180 天。</p>
+                        </div>
+                        <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4">
+                            <h5 class="text-sm font-bold text-white mb-2">告警关联分析</h5>
+                            <p class="text-xs text-slate-400">跨安全设备关联告警，自动去噪和分级，精准推送高危事件。</p>
+                        </div>
+                        <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4">
+                            <h5 class="text-sm font-bold text-white mb-2">Splunk 集成</h5>
+                            <p class="text-xs text-slate-400">安全告警实时集成到 GEMMB 看板，统一告警视图。</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-red-500/10 border border-red-500/20 rounded-lg text-[11px] font-semibold text-red-400">Palo Alto</span>
+                        <span class="px-3 py-1 bg-red-500/10 border border-red-500/20 rounded-lg text-[11px] font-semibold text-red-400">Fortigate</span>
+                        <span class="px-3 py-1 bg-red-500/10 border border-red-500/20 rounded-lg text-[11px] font-semibold text-red-400">Cisco IDS/IPS</span>
+                        <span class="px-3 py-1 bg-red-500/10 border border-red-500/20 rounded-lg text-[11px] font-semibold text-red-400">Sangfor</span>
+                        <span class="px-3 py-1 bg-red-500/10 border border-red-500/20 rounded-lg text-[11px] font-semibold text-red-400">Hillstone</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domain 3: Compute & Storage -->
+            <div class="mb-8">
+                <div class="bg-gradient-glass border border-brand-accent/15 rounded-2xl p-8 hover:border-brand-accent/40 transition-all duration-300" style="box-shadow: 0 0 15px rgba(139,92,246,0.05);">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-xl bg-brand-accent/20 flex items-center justify-center border border-brand-accent/40 shrink-0">
+                            <svg class="w-6 h-6 text-brand-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"></path></svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-extrabold text-white">03 — 计算与存储</h3>
+                            <p class="text-sm text-slate-400 mt-1">硬件带外管理、全闪存阵列和全栈虚拟化指标采集</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4">
+                            <h5 class="text-sm font-bold text-white mb-2">虚拟化深度监控</h5>
+                            <p class="text-xs text-slate-400">VMware vSphere API 深度集成，自动发现并监控虚拟机、主机、集群。</p>
+                        </div>
+                        <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4">
+                            <h5 class="text-sm font-bold text-white mb-2">硬件带外管理</h5>
+                            <p class="text-xs text-slate-400">Dell iDRAC、HPE iLO、Cisco UCS 带外管理接口直接采集硬件状态。</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-brand-accent/10 border border-brand-accent/20 rounded-lg text-[11px] font-semibold text-brand-accent">VMware vSphere</span>
+                        <span class="px-3 py-1 bg-brand-accent/10 border border-brand-accent/20 rounded-lg text-[11px] font-semibold text-brand-accent">Cisco UCS</span>
+                        <span class="px-3 py-1 bg-brand-accent/10 border border-brand-accent/20 rounded-lg text-[11px] font-semibold text-brand-accent">Dell iDRAC</span>
+                        <span class="px-3 py-1 bg-brand-accent/10 border border-brand-accent/20 rounded-lg text-[11px] font-semibold text-brand-accent">HPE iLO</span>
+                        <span class="px-3 py-1 bg-brand-accent/10 border border-brand-accent/20 rounded-lg text-[11px] font-semibold text-brand-accent">NetApp</span>
+                        <span class="px-3 py-1 bg-brand-accent/10 border border-brand-accent/20 rounded-lg text-[11px] font-semibold text-brand-accent">PureStorage</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domain 4: Cloud & DX -->
+            <div class="mb-8">
+                <div class="bg-gradient-glass border border-cyan-500/15 rounded-2xl p-8 hover:border-cyan-500/40 transition-all duration-300" style="box-shadow: 0 0 15px rgba(6,182,212,0.05);">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-xl bg-cyan-500/20 flex items-center justify-center border border-cyan-500/40 shrink-0">
+                            <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-extrabold text-white">04 — 公有云与数字体验 (DEM)</h3>
+                            <p class="text-sm text-slate-400 mt-1">公有云原生 API 集成 + Cisco ThousandEyes 主动式数字体验探针</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4">
+                            <h5 class="text-sm font-bold text-white mb-2">公有云 API 监控</h5>
+                            <p class="text-xs text-slate-400">原生 REST API 对接 AWS、Azure、阿里云、华为云、腾讯云，自动发现资源。</p>
+                        </div>
+                        <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4">
+                            <h5 class="text-sm font-bold text-white mb-2">数字体验监控 (DEM)</h5>
+                            <p class="text-xs text-slate-400">ThousandEyes 从局域网到 SaaS 路径级主动拨测，排除"灰色故障"。</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded-lg text-[11px] font-semibold text-cyan-400">AWS</span>
+                        <span class="px-3 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded-lg text-[11px] font-semibold text-cyan-400">Azure</span>
+                        <span class="px-3 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded-lg text-[11px] font-semibold text-cyan-400">阿里云</span>
+                        <span class="px-3 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded-lg text-[11px] font-semibold text-cyan-400">Microsoft 365</span>
+                        <span class="px-3 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded-lg text-[11px] font-semibold text-cyan-400">ThousandEyes</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domain 5: Database & OS Agent -->
+            <div>
+                <div class="bg-gradient-glass border border-brand-success/15 rounded-2xl p-8 hover:border-brand-success/40 transition-all duration-300" style="box-shadow: 0 0 15px rgba(16,185,129,0.05);">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-xl bg-brand-success/20 flex items-center justify-center border border-brand-success/40 shrink-0">
+                            <svg class="w-6 h-6 text-brand-success" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"></path></svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-extrabold text-white">05 — 数据库与 OS Agent</h3>
+                            <p class="text-sm text-slate-400 mt-1">主机端指标采集、深度数据库性能追踪和核心 Windows 服务监控</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4">
+                            <h5 class="text-sm font-bold text-white mb-2">数据库性能追踪</h5>
+                            <p class="text-xs text-slate-400">ODBC/JDBC 连接，慢查询分析、连接池监控、表空间使用率。</p>
+                        </div>
+                        <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4">
+                            <h5 class="text-sm font-bold text-white mb-2">Windows 服务监控</h5>
+                            <p class="text-xs text-slate-400">WMI/WinRM 采集 Windows 性能指标，核心服务状态实时监控。</p>
+                        </div>
+                        <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4">
+                            <h5 class="text-sm font-bold text-white mb-2">轻量级 Agent</h5>
+                            <p class="text-xs text-slate-400">约 100MB 内存占用，极低 CPU 消耗，Web 门户集中配置。</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-brand-success/10 border border-brand-success/20 rounded-lg text-[11px] font-semibold text-brand-success">MS SQL</span>
+                        <span class="px-3 py-1 bg-brand-success/10 border border-brand-success/20 rounded-lg text-[11px] font-semibold text-brand-success">MySQL</span>
+                        <span class="px-3 py-1 bg-brand-success/10 border border-brand-success/20 rounded-lg text-[11px] font-semibold text-brand-success">Oracle</span>
+                        <span class="px-3 py-1 bg-brand-success/10 border border-brand-success/20 rounded-lg text-[11px] font-semibold text-brand-success">Windows/Linux Agent</span>
+                        <span class="px-3 py-1 bg-brand-success/10 border border-brand-success/20 rounded-lg text-[11px] font-semibold text-brand-success">Windows IIS</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== MONITORING ENGINES ==================== -->
+    <section class="py-24 border-t border-slate-800 bg-[#040914] relative overflow-hidden">
+        <div class="absolute right-0 top-1/3 w-[500px] h-[500px] bg-brand-primary/5 rounded-full blur-[120px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16">
+                <div class="inline-flex items-center space-x-2 bg-brand-surface px-4 py-2 rounded-lg mb-4 border border-slate-700 shadow-md">
+                    <span class="text-brand-primary font-bold tracking-widest text-xs uppercase">监控引擎</span>
+                </div>
+                <h2 class="text-3xl md:text-5xl font-black mb-6 tracking-tight">深度监控引擎<span class="text-gradient-accent">详解</span></h2>
+                <p class="text-lg text-slate-400 max-w-4xl mx-auto">GEMMB 内置多种专业监控引擎，每一种都经过大规模生产环境验证，提供细粒度的数据采集与分析能力。</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- SNMP Engine -->
+                <div class="bg-gradient-glass border-glow-blue rounded-2xl p-8">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="w-10 h-10 rounded-lg bg-brand-secondary/20 flex items-center justify-center border border-brand-secondary/40">
+                            <svg class="w-5 h-5 text-brand-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path></svg>
+                        </div>
+                        <h3 class="text-lg font-extrabold text-white">SNMP 监控引擎</h3>
+                    </div>
+                    <p class="text-sm text-slate-400 mb-4">高度可配置的 SNMP 轮询引擎，厂商无关设计，可监控任何支持 SNMP 的设备。</p>
+                    <ul class="space-y-2.5 text-xs text-slate-400">
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-secondary rounded-full mt-1.5 mr-2.5 shrink-0"></span>状态、统计、阈值三维监控</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-secondary rounded-full mt-1.5 mr-2.5 shrink-0"></span>灵活实体模型，自动发现设备层级与依赖关系</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-secondary rounded-full mt-1.5 mr-2.5 shrink-0"></span>内置远程排障工具：SNMP 实时查询、Ping、Trace Route</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-secondary rounded-full mt-1.5 mr-2.5 shrink-0"></span>详细数据分析导航树，支持"忙时分析"</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-secondary rounded-full mt-1.5 mr-2.5 shrink-0"></span>支持 SNMP v1/v2c/v3，Trap 告警接收</li>
+                    </ul>
+                </div>
+
+                <!-- HTTP Engine -->
+                <div class="bg-gradient-glass border border-cyan-500/15 rounded-2xl p-8 hover:border-cyan-500/40 transition-all duration-300" style="box-shadow: 0 0 15px rgba(6,182,212,0.05);">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="w-10 h-10 rounded-lg bg-cyan-500/20 flex items-center justify-center border border-cyan-500/40">
+                            <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+                        </div>
+                        <h3 class="text-lg font-extrabold text-white">HTTP 监控引擎</h3>
+                    </div>
+                    <p class="text-sm text-slate-400 mb-4">网站 / Web 服务 / Web 应用的 HTTP 协议健康检查与性能监控。</p>
+                    <ul class="space-y-2.5 text-xs text-slate-400">
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-cyan-400 rounded-full mt-1.5 mr-2.5 shrink-0"></span>可定制脚本引擎，轮询多种内容类型</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-cyan-400 rounded-full mt-1.5 mr-2.5 shrink-0"></span>HTTP 响应状态与性能统计（总响应时间、内容类型分解）</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-cyan-400 rounded-full mt-1.5 mr-2.5 shrink-0"></span>SSL 证书监控：过期提醒、名称不匹配告警、过时协议检测</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-cyan-400 rounded-full mt-1.5 mr-2.5 shrink-0"></span>支持 HTTP/HTTPS 协议，可配置请求头和认证信息</li>
+                    </ul>
+                </div>
+
+                <!-- DNS Engine -->
+                <div class="bg-gradient-glass border border-brand-warning/15 rounded-2xl p-8 hover:border-brand-warning/40 transition-all duration-300" style="box-shadow: 0 0 15px rgba(245,158,11,0.05);">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="w-10 h-10 rounded-lg bg-brand-warning/20 flex items-center justify-center border border-brand-warning/40">
+                            <svg class="w-5 h-5 text-brand-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 21h7a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v11m0 5l4.879-4.879m0 0a3 3 0 104.243-4.242 3 3 0 00-4.243 4.242z"></path></svg>
+                        </div>
+                        <h3 class="text-lg font-extrabold text-white">DNS 监控引擎</h3>
+                    </div>
+                    <p class="text-sm text-slate-400 mb-4">全面 DNS 解析服务监控，支持所有主流 DNS 记录类型。</p>
+                    <ul class="space-y-2.5 text-xs text-slate-400">
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-warning rounded-full mt-1.5 mr-2.5 shrink-0"></span>支持 A、MX、NS、URI、CNAME 等所有主流记录类型</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-warning rounded-full mt-1.5 mr-2.5 shrink-0"></span>查询结果与预配置值自动比对，异常即触发告警</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-warning rounded-full mt-1.5 mr-2.5 shrink-0"></span>DNS 组管理，支持动态 IP 地址设备</li>
+                    </ul>
+                </div>
+
+                <!-- NetFlow/sFlow Engine -->
+                <div class="bg-gradient-glass border border-brand-accent/15 rounded-2xl p-8 hover:border-brand-accent/40 transition-all duration-300" style="box-shadow: 0 0 15px rgba(139,92,246,0.05);">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="w-10 h-10 rounded-lg bg-brand-accent/20 flex items-center justify-center border border-brand-accent/40">
+                            <svg class="w-5 h-5 text-brand-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                        </div>
+                        <h3 class="text-lg font-extrabold text-white">NetFlow / sFlow 流量分析</h3>
+                    </div>
+                    <p class="text-sm text-slate-400 mb-4">多维度网络流量可视化分析，支持 NetFlow v5/v9 和 sFlow 协议。</p>
+                    <ul class="space-y-2.5 text-xs text-slate-400">
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-accent rounded-full mt-1.5 mr-2.5 shrink-0"></span>Top Talkers、Top Listeners、Top Conversations</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-accent rounded-full mt-1.5 mr-2.5 shrink-0"></span>Top Applications、Top Protocols、Top TOS</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-accent rounded-full mt-1.5 mr-2.5 shrink-0"></span>NetFlow Relay 中继功能，数据转发至第三方系统</li>
+                    </ul>
+                </div>
+
+                <!-- Syslog Engine -->
+                <div class="bg-gradient-glass border border-red-500/15 rounded-2xl p-8 hover:border-red-500/40 transition-all duration-300 lg:col-span-2" style="box-shadow: 0 0 15px rgba(239,68,68,0.05);">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="w-10 h-10 rounded-lg bg-red-500/20 flex items-center justify-center border border-red-500/40">
+                            <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        </div>
+                        <h3 class="text-lg font-extrabold text-white">Syslog 日志管理</h3>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <p class="text-sm text-slate-400 mb-4">分布式 Poller 高密采集 Syslog，支持全文检索与定制化过滤。</p>
+                            <ul class="space-y-2.5 text-xs text-slate-400">
+                                <li class="flex items-start"><span class="w-1.5 h-1.5 bg-red-400 rounded-full mt-1.5 mr-2.5 shrink-0"></span>基于 Syslog 自动生成告警</li>
+                                <li class="flex items-start"><span class="w-1.5 h-1.5 bg-red-400 rounded-full mt-1.5 mr-2.5 shrink-0"></span>日志采集存储与全文检索</li>
+                                <li class="flex items-start"><span class="w-1.5 h-1.5 bg-red-400 rounded-full mt-1.5 mr-2.5 shrink-0"></span>C# 脚本定制化过滤规则</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4">
+                                <h5 class="text-sm font-bold text-white mb-2">Syslog Relay 中继</h5>
+                                <p class="text-xs text-slate-400">支持按客户/设备精细化转发控制，加密转发至合规冷备存储区，满足等保 2.0 规定的 180 天原始日志存储要求。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SMART MONITORING + CONFIGURE HARVEST ==================== -->
+    <section class="py-24 border-t border-slate-800 bg-[#070D18] relative overflow-hidden">
+        <div class="absolute left-0 bottom-0 w-[500px] h-[500px] bg-brand-success/5 rounded-full blur-[120px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Smart Monitoring -->
+                <div class="bg-gradient-glass border border-brand-success/15 rounded-2xl p-8 hover:border-brand-success/40 transition-all duration-300" style="box-shadow: 0 0 15px rgba(16,185,129,0.05);">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="w-10 h-10 rounded-lg bg-brand-success/20 flex items-center justify-center border border-brand-success/40">
+                            <svg class="w-5 h-5 text-brand-success" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        </div>
+                        <h3 class="text-lg font-extrabold text-white">Smart Monitoring 智能监控</h3>
+                    </div>
+                    <p class="text-sm text-slate-400 mb-6">智能降低工单数量，有效过滤偶发性抖动告警，减少无效工单。</p>
+
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-brand-success/10 flex items-center justify-center border border-brand-success/20 shrink-0 mt-0.5">
+                                <span class="text-xs font-black text-brand-success">1</span>
+                            </div>
+                            <div>
+                                <h5 class="text-sm font-bold text-white">异常进入"观察"状态</h5>
+                                <p class="text-xs text-slate-400 mt-1">非正常告警不立即创建工单，而是进入观察期</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-brand-success/10 flex items-center justify-center border border-brand-success/20 shrink-0 mt-0.5">
+                                <span class="text-xs font-black text-brand-success">2</span>
+                            </div>
+                            <div>
+                                <h5 class="text-sm font-bold text-white">观察期内自动判断</h5>
+                                <p class="text-xs text-slate-400 mt-1">恢复正常 → 自动关闭；超时未恢复 → 按状态设定严重等级</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-brand-success/10 flex items-center justify-center border border-brand-success/20 shrink-0 mt-0.5">
+                                <span class="text-xs font-black text-brand-success">3</span>
+                            </div>
+                            <div>
+                                <h5 class="text-sm font-bold text-white">有效过滤噪声</h5>
+                                <p class="text-xs text-slate-400 mt-1">偶发性抖动告警被过滤，只有持续性故障才创建工单</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Configure Harvest -->
+                <div class="bg-gradient-glass border border-brand-warning/15 rounded-2xl p-8 hover:border-brand-warning/40 transition-all duration-300" style="box-shadow: 0 0 15px rgba(245,158,11,0.05);">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="w-10 h-10 rounded-lg bg-brand-warning/20 flex items-center justify-center border border-brand-warning/40">
+                            <svg class="w-5 h-5 text-brand-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        </div>
+                        <h3 class="text-lg font-extrabold text-white">Configure Harvest 配置采集</h3>
+                    </div>
+                    <p class="text-sm text-slate-400 mb-6">定时采集网络设备配置版本，自动比对变更差异，发现未授权变更时主动报警。</p>
+
+                    <div class="space-y-4">
+                        <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4">
+                            <h5 class="text-sm font-bold text-white mb-2">灵活脚本引擎</h5>
+                            <p class="text-xs text-slate-400">支持通过 Telnet、SSH 或 SNMP+TFTP 采集设备配置。</p>
+                        </div>
+                        <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4">
+                            <h5 class="text-sm font-bold text-white mb-2">历史版本比对</h5>
+                            <p class="text-xs text-slate-400">配置文档自动保存并与历史版本逐行比对，清晰展示变更差异。</p>
+                        </div>
+                        <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4">
+                            <h5 class="text-sm font-bold text-white mb-2">定时调度执行</h5>
+                            <p class="text-xs text-slate-400">可按日定时调度执行，防止配置漂移，确保合规基线。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Network Topology -->
+            <div class="mt-8 bg-gradient-glass border-glow-blue rounded-2xl p-8">
+                <div class="flex items-center gap-3 mb-5">
+                    <div class="w-10 h-10 rounded-lg bg-brand-secondary/20 flex items-center justify-center border border-brand-secondary/40">
+                        <svg class="w-5 h-5 text-brand-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"></path></svg>
+                    </div>
+                    <h3 class="text-lg font-extrabold text-white">网络拓扑发现与根因分析</h3>
+                </div>
+                <p class="text-sm text-slate-400 mb-4">自动发现被管设备的轮询拓扑与依赖关系，动态拓扑可视化展示。集成服务台进行根因分析：多台设备不可达时，自动关联为同一事件生成一张工单，避免告警风暴。</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4 text-center">
+                        <div class="text-2xl font-black text-brand-secondary">Auto</div>
+                        <div class="text-[10px] text-slate-500 font-bold uppercase mt-1">拓扑自动发现</div>
+                    </div>
+                    <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4 text-center">
+                        <div class="text-2xl font-black text-brand-success">RCA</div>
+                        <div class="text-[10px] text-slate-500 font-bold uppercase mt-1">根因关联分析</div>
+                    </div>
+                    <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4 text-center">
+                        <div class="text-2xl font-black text-brand-warning">-90%</div>
+                        <div class="text-[10px] text-slate-500 font-bold uppercase mt-1">告警风暴抑制</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== DISTRIBUTED POLLER ==================== -->
+    <section class="py-24 border-t border-slate-800 bg-[#040914] relative overflow-hidden">
+        <div class="absolute right-0 top-1/4 w-[500px] h-[500px] bg-brand-accent/5 rounded-full blur-[120px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16">
+                <div class="inline-flex items-center space-x-2 bg-brand-surface px-4 py-2 rounded-lg mb-4 border border-slate-700 shadow-md">
+                    <span class="text-brand-accent font-bold tracking-widest text-xs uppercase">分布式采集</span>
+                </div>
+                <h2 class="text-3xl md:text-5xl font-black mb-6 tracking-tight">分布式 Poller <span class="text-gradient-accent">架构</span></h2>
+                <p class="text-lg text-slate-400 max-w-4xl mx-auto">借助高可扩展的分布式监控机制，GEMMB 在客户多区域或多分支网络中统一部署 Poller 代理端，支持多租户与高安全加密通信。</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+                <div class="bg-gradient-glass border-glow-blue rounded-2xl p-6">
+                    <div class="w-10 h-10 rounded-lg bg-brand-accent/20 flex items-center justify-center border border-brand-accent/40 mb-4">
+                        <svg class="w-5 h-5 text-brand-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                    </div>
+                    <h4 class="text-sm font-extrabold text-white mb-2">多租户 VRF 隔离</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">每个 Poller 支持多租户部署，不同客户/部门之间的监控数据在网络层面绝对隔离。</p>
+                </div>
+
+                <div class="bg-gradient-glass border-glow-blue rounded-2xl p-6">
+                    <div class="w-10 h-10 rounded-lg bg-brand-success/20 flex items-center justify-center border border-brand-success/40 mb-4">
+                        <svg class="w-5 h-5 text-brand-success" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                    </div>
+                    <h4 class="text-sm font-extrabold text-white mb-2">SSL 加密通信</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">Poller 与中心平台之间的所有通信均通过 SSL/TLS 加密，防止数据在传输过程中被截获。</p>
+                </div>
+
+                <div class="bg-gradient-glass border-glow-blue rounded-2xl p-6">
+                    <div class="w-10 h-10 rounded-lg bg-brand-secondary/20 flex items-center justify-center border border-brand-secondary/40 mb-4">
+                        <svg class="w-5 h-5 text-brand-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                    </div>
+                    <h4 class="text-sm font-extrabold text-white mb-2">弹性拓扑扩展</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">从微型分支到跨国云环境无缝扩展，Master Poller 架构支持全球分布式部署，单虚拟 Poller 支持多客户。</p>
+                </div>
+
+                <div class="bg-gradient-glass border-glow-blue rounded-2xl p-6">
+                    <div class="w-10 h-10 rounded-lg bg-brand-warning/20 flex items-center justify-center border border-brand-warning/40 mb-4">
+                        <svg class="w-5 h-5 text-brand-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    </div>
+                    <h4 class="text-sm font-extrabold text-white mb-2">远程集中管理</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">支持远程集中管理与配置下发，无需在每个节点安排运维人员。内置看门狗自动恢复软件故障。</p>
+                </div>
+            </div>
+
+            <!-- Poller Deployment Info -->
+            <div class="mt-8 bg-brand-card/40 border border-slate-700/30 rounded-2xl p-6 md:p-8">
+                <h4 class="text-sm font-extrabold text-white mb-4">Poller 部署与配置能力</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="flex items-start gap-3">
+                        <span class="w-1.5 h-1.5 bg-brand-secondary rounded-full mt-1.5 shrink-0"></span>
+                        <span class="text-xs text-slate-400">支持 Windows、Linux 和 Docker 部署</span>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <span class="w-1.5 h-1.5 bg-brand-secondary rounded-full mt-1.5 shrink-0"></span>
+                        <span class="text-xs text-slate-400">按客户、区域、位置或设备级别灵活分配</span>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <span class="w-1.5 h-1.5 bg-brand-secondary rounded-full mt-1.5 shrink-0"></span>
+                        <span class="text-xs text-slate-400">基于角色的 Poller 管理，支持委托部署</span>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <span class="w-1.5 h-1.5 bg-brand-secondary rounded-full mt-1.5 shrink-0"></span>
+                        <span class="text-xs text-slate-400">可配置 Ping 静默时间、SNMP 轮询间隔</span>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <span class="w-1.5 h-1.5 bg-brand-secondary rounded-full mt-1.5 shrink-0"></span>
+                        <span class="text-xs text-slate-400">HTTP 轮询间隔、协议端口可配置</span>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <span class="w-1.5 h-1.5 bg-brand-secondary rounded-full mt-1.5 shrink-0"></span>
+                        <span class="text-xs text-slate-400">统计汇总周期、内置看门狗机制</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SERVER AGENTS ==================== -->
+    <section class="py-24 border-t border-slate-800 bg-[#070D18] relative overflow-hidden">
+        <div class="absolute left-0 top-1/3 w-[500px] h-[500px] bg-cyan-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16">
+                <div class="inline-flex items-center space-x-2 bg-brand-surface px-4 py-2 rounded-lg mb-4 border border-slate-700 shadow-md">
+                    <span class="text-cyan-400 font-bold tracking-widest text-xs uppercase">服务器管理</span>
+                </div>
+                <h2 class="text-3xl md:text-5xl font-black mb-6 tracking-tight">服务器 Agent <span class="text-gradient">深度管理</span></h2>
+                <p class="text-lg text-slate-400 max-w-4xl mx-auto">通过轻量级 Windows / Linux Agent 实现服务器环境的深度监控与远程管理，覆盖从指标采集到远程桌面、事件日志到脚本执行的完整管理场景。</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Agent Monitoring -->
+                <div class="bg-gradient-glass border-glow-blue rounded-2xl p-6">
+                    <div class="w-10 h-10 rounded-lg bg-brand-secondary/20 flex items-center justify-center border border-brand-secondary/40 mb-4">
+                        <svg class="w-5 h-5 text-brand-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path></svg>
+                    </div>
+                    <h4 class="text-sm font-extrabold text-white mb-2">Windows / Linux Agent</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed mb-3">轻量级部署（约 100MB 内存，极低 CPU 占用），通过 Web 门户集中配置。</p>
+                    <ul class="space-y-2 text-xs text-slate-400">
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-secondary rounded-full mt-1 mr-2 shrink-0"></span>灵活脚本化监控引擎</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-secondary rounded-full mt-1 mr-2 shrink-0"></span>状态/统计/阈值监控与告警生成</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-secondary rounded-full mt-1 mr-2 shrink-0"></span>全局默认配置 + 单项覆盖</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-secondary rounded-full mt-1 mr-2 shrink-0"></span>自定义时间段阈值</li>
+                    </ul>
+                </div>
+
+                <!-- Remote Desktop -->
+                <div class="bg-gradient-glass border-glow-blue rounded-2xl p-6">
+                    <div class="w-10 h-10 rounded-lg bg-cyan-500/20 flex items-center justify-center border border-cyan-500/40 mb-4">
+                        <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <h4 class="text-sm font-extrabold text-white mb-2">Windows 远程桌面</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed mb-3">即时（Just-in-Time）远程桌面访问，安全与便捷的完美结合。</p>
+                    <ul class="space-y-2 text-xs text-slate-400">
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-cyan-400 rounded-full mt-1 mr-2 shrink-0"></span>连接前自动加入远程桌面用户组</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-cyan-400 rounded-full mt-1 mr-2 shrink-0"></span>连接结束后自动移除权限</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-cyan-400 rounded-full mt-1 mr-2 shrink-0"></span>可选加入本地管理员组</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-cyan-400 rounded-full mt-1 mr-2 shrink-0"></span>与密码保险箱集成</li>
+                    </ul>
+                </div>
+
+                <!-- Desktop Sharing -->
+                <div class="bg-gradient-glass border-glow-blue rounded-2xl p-6">
+                    <div class="w-10 h-10 rounded-lg bg-brand-accent/20 flex items-center justify-center border border-brand-accent/40 mb-4">
+                        <svg class="w-5 h-5 text-brand-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                    </div>
+                    <h4 class="text-sm font-extrabold text-white mb-2">Windows 桌面共享</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed mb-3">通过 Server Agent 作为主机实现安全桌面共享，支持 Connector 客户端。</p>
+                    <ul class="space-y-2 text-xs text-slate-400">
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-accent rounded-full mt-1 mr-2 shrink-0"></span>仅查看或交互控制模式</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-accent rounded-full mt-1 mr-2 shrink-0"></span>自定义访问权限级别</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-accent rounded-full mt-1 mr-2 shrink-0"></span>支持安全桌面（UAC）查看与交互</li>
+                    </ul>
+                </div>
+
+                <!-- Event Log -->
+                <div class="bg-gradient-glass border-glow-blue rounded-2xl p-6">
+                    <div class="w-10 h-10 rounded-lg bg-brand-warning/20 flex items-center justify-center border border-brand-warning/40 mb-4">
+                        <svg class="w-5 h-5 text-brand-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                    </div>
+                    <h4 class="text-sm font-extrabold text-white mb-2">Windows 事件日志监控</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed mb-3">灵活选择监控的事件日志和事件级别，精细化过滤。</p>
+                    <ul class="space-y-2 text-xs text-slate-400">
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-warning rounded-full mt-1 mr-2 shrink-0"></span>事件 ID 过滤（包含/排除/范围）</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-warning rounded-full mt-1 mr-2 shrink-0"></span>事件汇总：同窗口内相同事件合并计数</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-warning rounded-full mt-1 mr-2 shrink-0"></span>事件过滤脚本，自定义告警文本</li>
+                    </ul>
+                </div>
+
+                <!-- Shell Scripts -->
+                <div class="bg-gradient-glass border-glow-blue rounded-2xl p-6">
+                    <div class="w-10 h-10 rounded-lg bg-brand-success/20 flex items-center justify-center border border-brand-success/40 mb-4">
+                        <svg class="w-5 h-5 text-brand-success" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                    </div>
+                    <h4 class="text-sm font-extrabold text-white mb-2">Shell 脚本与系统更新</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed mb-3">直接在 Web 端执行 Shell / PowerShell 脚本，无需 SSH 登录。</p>
+                    <ul class="space-y-2 text-xs text-slate-400">
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-success rounded-full mt-1 mr-2 shrink-0"></span>在线执行 Shell / PowerShell 脚本</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-success rounded-full mt-1 mr-2 shrink-0"></span>Windows Update 过期更新告警</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-success rounded-full mt-1 mr-2 shrink-0"></span>自动安装更新 / 手动检查下载</li>
+                    </ul>
+                </div>
+
+                <!-- Custom KPI Dashboard -->
+                <div class="bg-gradient-glass border-glow-blue rounded-2xl p-6">
+                    <div class="w-10 h-10 rounded-lg bg-red-500/20 flex items-center justify-center border border-red-500/40 mb-4">
+                        <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                    </div>
+                    <h4 class="text-sm font-extrabold text-white mb-2">自定义 KPI 看板</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed mb-3">拖拽式仪表盘，支持多维度数据可视化。</p>
+                    <ul class="space-y-2 text-xs text-slate-400">
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-red-400 rounded-full mt-1 mr-2 shrink-0"></span>按角色定制监控视图</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-red-400 rounded-full mt-1 mr-2 shrink-0"></span>CIO 概览 / 工程师详情</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-red-400 rounded-full mt-1 mr-2 shrink-0"></span>SLA 达标率自动追踪</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== PROTOCOL TABLE ==================== -->
+    <section class="py-24 border-t border-slate-800 bg-[#040914] relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16">
+                <div class="inline-flex items-center space-x-2 bg-brand-surface px-4 py-2 rounded-lg mb-4 border border-slate-700 shadow-md">
+                    <span class="text-brand-secondary font-bold tracking-widest text-xs uppercase">协议总表</span>
+                </div>
+                <h2 class="text-3xl md:text-5xl font-black mb-6 tracking-tight">监控协议与<span class="text-gradient">技术</span></h2>
+                <p class="text-lg text-slate-400 max-w-4xl mx-auto">GEMMB 支持所有主流 IT 监控协议和技术，覆盖从传统网络到现代云平台的完整技术栈。</p>
+            </div>
+
+            <div class="bg-gradient-glass border border-slate-700/40 rounded-2xl overflow-hidden shadow-xl">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="bg-brand-surface/80 border-b border-slate-700/60">
+                                <th class="px-6 py-4 text-left text-xs font-bold text-brand-secondary uppercase tracking-wider">协议 / 技术</th>
+                                <th class="px-6 py-4 text-left text-xs font-bold text-brand-secondary uppercase tracking-wider">用途</th>
+                                <th class="px-6 py-4 text-left text-xs font-bold text-brand-secondary uppercase tracking-wider">适用场景</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-700/30">
+                            <tr class="hover:bg-brand-surface/30 transition-colors">
+                                <td class="px-6 py-3.5 font-semibold text-white">SNMP v1/v2c/v3</td>
+                                <td class="px-6 py-3.5 text-slate-400">设备状态轮询、Trap 告警接收</td>
+                                <td class="px-6 py-3.5 text-slate-500">网络设备、服务器硬件</td>
+                            </tr>
+                            <tr class="hover:bg-brand-surface/30 transition-colors">
+                                <td class="px-6 py-3.5 font-semibold text-white">ICMP / Trace</td>
+                                <td class="px-6 py-3.5 text-slate-400">网络连通性与路径追踪</td>
+                                <td class="px-6 py-3.5 text-slate-500">所有 IP 设备</td>
+                            </tr>
+                            <tr class="hover:bg-brand-surface/30 transition-colors">
+                                <td class="px-6 py-3.5 font-semibold text-white">NetFlow v5/v9 / sFlow</td>
+                                <td class="px-6 py-3.5 text-slate-400">流量分析与带宽监控</td>
+                                <td class="px-6 py-3.5 text-slate-500">路由器、交换机</td>
+                            </tr>
+                            <tr class="hover:bg-brand-surface/30 transition-colors">
+                                <td class="px-6 py-3.5 font-semibold text-white">Syslog</td>
+                                <td class="px-6 py-3.5 text-slate-400">日志采集与事件告警</td>
+                                <td class="px-6 py-3.5 text-slate-500">网络设备、防火墙、服务器</td>
+                            </tr>
+                            <tr class="hover:bg-brand-surface/30 transition-colors">
+                                <td class="px-6 py-3.5 font-semibold text-white">HTTP / HTTPS</td>
+                                <td class="px-6 py-3.5 text-slate-400">Web 服务与 SSL 证书监控</td>
+                                <td class="px-6 py-3.5 text-slate-500">网站、Web 应用、API</td>
+                            </tr>
+                            <tr class="hover:bg-brand-surface/30 transition-colors">
+                                <td class="px-6 py-3.5 font-semibold text-white">DNS</td>
+                                <td class="px-6 py-3.5 text-slate-400">DNS 解析服务监控</td>
+                                <td class="px-6 py-3.5 text-slate-500">DNS 服务器</td>
+                            </tr>
+                            <tr class="hover:bg-brand-surface/30 transition-colors">
+                                <td class="px-6 py-3.5 font-semibold text-white">WMI / WinRM</td>
+                                <td class="px-6 py-3.5 text-slate-400">Windows 性能指标采集</td>
+                                <td class="px-6 py-3.5 text-slate-500">Windows 服务器</td>
+                            </tr>
+                            <tr class="hover:bg-brand-surface/30 transition-colors">
+                                <td class="px-6 py-3.5 font-semibold text-white">SSH / Telnet</td>
+                                <td class="px-6 py-3.5 text-slate-400">配置自动收割</td>
+                                <td class="px-6 py-3.5 text-slate-500">网络设备</td>
+                            </tr>
+                            <tr class="hover:bg-brand-surface/30 transition-colors">
+                                <td class="px-6 py-3.5 font-semibold text-white">REST API</td>
+                                <td class="px-6 py-3.5 text-slate-400">云平台 / SaaS / SD-WAN 集成</td>
+                                <td class="px-6 py-3.5 text-slate-500">AWS、Azure、M365、Viptela</td>
+                            </tr>
+                            <tr class="hover:bg-brand-surface/30 transition-colors">
+                                <td class="px-6 py-3.5 font-semibold text-white">VMware API</td>
+                                <td class="px-6 py-3.5 text-slate-400">虚拟化深度监控</td>
+                                <td class="px-6 py-3.5 text-slate-500">vSphere 集群</td>
+                            </tr>
+                            <tr class="hover:bg-brand-surface/30 transition-colors">
+                                <td class="px-6 py-3.5 font-semibold text-white">ODBC / JDBC</td>
+                                <td class="px-6 py-3.5 text-slate-400">数据库性能追踪</td>
+                                <td class="px-6 py-3.5 text-slate-500">SQL Server、MySQL、Oracle</td>
+                            </tr>
+                            <tr class="hover:bg-brand-surface/30 transition-colors">
+                                <td class="px-6 py-3.5 font-semibold text-white">TACACS+</td>
+                                <td class="px-6 py-3.5 text-slate-400">网络设备 AAA 认证审计</td>
+                                <td class="px-6 py-3.5 text-slate-500">Cisco 等网络设备</td>
+                            </tr>
+                            <tr class="hover:bg-brand-surface/30 transition-colors">
+                                <td class="px-6 py-3.5 font-semibold text-white">TCP</td>
+                                <td class="px-6 py-3.5 text-slate-400">端口与服务可用性检测</td>
+                                <td class="px-6 py-3.5 text-slate-500">所有 TCP 服务</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- API Polling Note -->
+            <div class="mt-8 bg-gradient-to-r from-brand-secondary/10 to-cyan-500/10 border border-brand-secondary/20 rounded-2xl p-6 md:p-8">
+                <div class="flex items-start gap-4">
+                    <div class="w-10 h-10 rounded-lg bg-brand-secondary/20 flex items-center justify-center border border-brand-secondary/40 shrink-0 mt-1">
+                        <svg class="w-5 h-5 text-brand-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-extrabold text-white mb-2">API 轮询 — 云平台与 SD-WAN 控制器</h4>
+                        <p class="text-xs text-slate-400 leading-relaxed mb-3">支持通过原生 API 监控主流云平台和 SD-WAN 控制器，自动发现设备并导入平台监控。支持多种认证方式，可定制轮询脚本。</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-2.5 py-1 bg-brand-card border border-slate-700/40 rounded-lg text-[10px] font-semibold text-slate-400">AWS</span>
+                            <span class="px-2.5 py-1 bg-brand-card border border-slate-700/40 rounded-lg text-[10px] font-semibold text-slate-400">Azure</span>
+                            <span class="px-2.5 py-1 bg-brand-card border border-slate-700/40 rounded-lg text-[10px] font-semibold text-slate-400">阿里云</span>
+                            <span class="px-2.5 py-1 bg-brand-card border border-slate-700/40 rounded-lg text-[10px] font-semibold text-slate-400">华为云</span>
+                            <span class="px-2.5 py-1 bg-brand-card border border-slate-700/40 rounded-lg text-[10px] font-semibold text-slate-400">腾讯云</span>
+                            <span class="px-2.5 py-1 bg-brand-card border border-slate-700/40 rounded-lg text-[10px] font-semibold text-slate-400">Viptela vManage</span>
+                            <span class="px-2.5 py-1 bg-brand-card border border-slate-700/40 rounded-lg text-[10px] font-semibold text-slate-400">Meraki</span>
+                            <span class="px-2.5 py-1 bg-brand-card border border-slate-700/40 rounded-lg text-[10px] font-semibold text-slate-400">Aruba</span>
+                            <span class="px-2.5 py-1 bg-brand-card border border-slate-700/40 rounded-lg text-[10px] font-semibold text-slate-400">VeloCloud</span>
+                            <span class="px-2.5 py-1 bg-brand-card border border-slate-700/40 rounded-lg text-[10px] font-semibold text-slate-400">VMware vCenter</span>
+                            <span class="px-2.5 py-1 bg-brand-card border border-slate-700/40 rounded-lg text-[10px] font-semibold text-slate-400">Dell OpenManage</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="py-16 text-center bg-brand-dark border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-lg font-extrabold text-white mb-4"><span class="text-gradient">IT</span>Hub 平台</div>
+            <p class="text-sm text-slate-500 mb-6">Logicalis 网赢 — 全球 ICT 解决方案与管理服务提供商 · Architects of Change</p>
+            <div class="flex flex-wrap justify-center gap-4 mb-8">
+                <a href="platform.html" class="text-xs text-slate-400 hover:text-slate-300 transition-colors">平台架构</a>
+                <a href="gemmb.html" class="text-xs text-slate-400 hover:text-brand-secondary transition-colors">GEMMB 监控</a>
+                <a href="cmdb.html" class="text-xs text-slate-400 hover:text-brand-warning transition-colors">CMDB 配置</a>
+                <a href="itsm.html" class="text-xs text-slate-400 hover:text-brand-accent transition-colors">ITSM 服务</a>
+                <a href="automation.html" class="text-xs text-slate-400 hover:text-brand-success transition-colors">自动化 / AI</a>
+                <a href="integration.html" class="text-xs text-slate-400 hover:text-cyan-400 transition-colors">集成框架</a>
+                <a href="noc.html" class="text-xs text-slate-400 hover:text-red-400 transition-colors">统一运营服务</a>
+            </div>
+            <p class="text-[10px] font-bold text-slate-600 uppercase tracking-widest">&copy; 2026 Logicalis 中国 · 保留所有权利</p>
+        </div>
+    </footer>
+
+
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            const isLight = body.classList.toggle('theme-light');
+            body.classList.toggle('bg-grid-pattern', !isLight);
+            localStorage.setItem('ithub-theme', isLight ? 'light' : 'dark');
+            document.getElementById('icon-moon').classList.toggle('hidden', isLight);
+            document.getElementById('icon-sun').classList.toggle('hidden', !isLight);
+        }
+        (function() {
+            if (localStorage.getItem('ithub-theme') === 'light') {
+                document.body.classList.add('theme-light');
+                document.body.classList.remove('bg-grid-pattern');
+                var moon = document.getElementById('icon-moon');
+                var sun = document.getElementById('icon-sun');
+                if (moon && sun) { moon.classList.add('hidden'); sun.classList.remove('hidden'); }
+            }
+        })();
+    </script>
+</body>
+</html>

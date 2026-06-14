@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GEMMB Global Monitoring | ITHub — Logicalis China</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            dark: '#030712',
+                            card: '#0F172A',
+                            surface: '#1E293B',
+                            primary: '#00F0FF',
+                            secondary: '#3B82F6',
+                            accent: '#8B5CF6',
+                            success: '#10B981',
+                            warning: '#F59E0B'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #030712; color: #F8FAFC; overflow-x: hidden; }
+        .text-gradient { background: linear-gradient(135deg, #00F0FF 0%, #3B82F6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .text-gradient-accent { background: linear-gradient(135deg, #8B5CF6 0%, #00F0FF 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .bg-gradient-glass { background: linear-gradient(145deg, rgba(15, 23, 42, 0.8) 0%, rgba(3, 7, 18, 0.9) 100%); backdrop-filter: blur(16px); }
+        .border-glow { border: 1px solid rgba(0, 240, 255, 0.15); box-shadow: inset 0 0 20px rgba(0, 240, 255, 0.02), 0 0 15px rgba(0, 240, 255, 0.05); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .border-glow:hover { border-color: rgba(0, 240, 255, 0.6); box-shadow: inset 0 0 20px rgba(0, 240, 255, 0.05), 0 0 30px rgba(0, 240, 255, 0.2); transform: translateY(-4px); }
+        .border-glow-blue { border: 1px solid rgba(59, 130, 246, 0.2); box-shadow: inset 0 0 20px rgba(59, 130, 246, 0.02), 0 0 15px rgba(59, 130, 246, 0.05); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .border-glow-blue:hover { border-color: rgba(59, 130, 246, 0.6); box-shadow: inset 0 0 20px rgba(59, 130, 246, 0.05), 0 0 30px rgba(59, 130, 246, 0.2); transform: translateY(-4px); }
+        .bg-grid-pattern { background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%231E293B' fill-opacity='0.4' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E"); }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #030712; }
+        ::-webkit-scrollbar-thumb { background: #1E293B; border-radius: 4px; }
+        .nav-glass { background: rgba(3, 7, 18, 0.85); backdrop-filter: blur(20px); }
+
+        /* ===== LIGHT THEME ===== */
+        body.theme-light { background-color: #F8FAFC; color: #1E293B; }
+        body.theme-light .bg-grid-pattern { background-image: none !important; }
+        body.theme-light .text-gradient { background: linear-gradient(135deg, #0284C7 0%, #2563EB 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        body.theme-light .text-gradient-accent { background: linear-gradient(135deg, #7C3AED 0%, #0284C7 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        body.theme-light .text-gradient-red { background: linear-gradient(135deg, #DC2626 0%, #EA580C 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        body.theme-light .nav-glass { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px); border-color: #E2E8F0; }
+        body.theme-light .bg-gradient-glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(16px); }
+        body.theme-light .border-glow { border-color: rgba(0, 0, 0, 0.08); box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04); }
+        body.theme-light .border-glow:hover { border-color: rgba(37, 99, 235, 0.3); box-shadow: 0 4px 20px rgba(37, 99, 235, 0.1); }
+        body.theme-light .border-glow-blue { border-color: rgba(0, 0, 0, 0.08); box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+        body.theme-light .border-glow-blue:hover { border-color: rgba(37, 99, 235, 0.3); box-shadow: 0 4px 20px rgba(37, 99, 235, 0.1); }
+        body.theme-light .border-glow-accent { border-color: rgba(0, 0, 0, 0.08); box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+        body.theme-light .border-glow-accent:hover { border-color: rgba(124, 58, 237, 0.3); box-shadow: 0 4px 20px rgba(124, 58, 237, 0.1); }
+        body.theme-light .border-glow-warning { border-color: rgba(0, 0, 0, 0.08); box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+        body.theme-light .border-glow-warning:hover { border-color: rgba(217, 119, 6, 0.3); box-shadow: 0 4px 20px rgba(217, 119, 6, 0.1); }
+        body.theme-light .border-glow-success { border-color: rgba(0, 0, 0, 0.08); box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+        body.theme-light .border-glow-success:hover { border-color: rgba(5, 150, 105, 0.3); box-shadow: 0 4px 20px rgba(5, 150, 105, 0.1); }
+        body.theme-light .border-glow-cyan { border-color: rgba(0, 0, 0, 0.08); box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+        body.theme-light .border-glow-cyan:hover { border-color: rgba(6, 182, 212, 0.3); box-shadow: 0 4px 20px rgba(6, 182, 212, 0.1); }
+        body.theme-light .border-glow-red { border-color: rgba(0, 0, 0, 0.08); box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+        body.theme-light .border-glow-red:hover { border-color: rgba(220, 38, 38, 0.3); box-shadow: 0 4px 20px rgba(220, 38, 38, 0.1); }
+        body.theme-light .text-white { color: #0F172A; }
+        body.theme-light .text-slate-300 { color: #475569; }
+        body.theme-light .text-slate-400 { color: #64748B; }
+        body.theme-light .text-slate-500 { color: #94A3B8; }
+        body.theme-light .text-slate-600 { color: #CBD5E1; }
+        body.theme-light .bg-brand-card, body.theme-light .bg-brand-card\/60, body.theme-light .bg-brand-card\/80, body.theme-light .bg-brand-card\/40 { background-color: #FFFFFF; }
+        body.theme-light .bg-brand-surface, body.theme-light .bg-brand-surface\/60, body.theme-light .bg-brand-surface\/30 { background-color: #F1F5F9; }
+        body.theme-light .bg-brand-dark { background-color: #F8FAFC; }
+        body.theme-light .bg-\[\#070D18\] { background-color: #F1F5F9; }
+        body.theme-light .bg-\[\#040914\] { background-color: #FFFFFF; }
+        body.theme-light .bg-\[\#0B1221\] { background-color: #F8FAFC; }
+        body.theme-light .border-slate-800, body.theme-light .border-slate-800\/60 { border-color: #E2E8F0; }
+        body.theme-light .border-slate-700, body.theme-light .border-slate-700\/50, body.theme-light .border-slate-700\/40, body.theme-light .border-slate-700\/30 { border-color: #E2E8F0; }
+        body.theme-light .divide-slate-700\/30 > :not([hidden]) ~ :not([hidden]) { border-color: #E2E8F0; }
+        body.theme-light .hover\:text-white:hover { color: #1E40AF; }
+        body.theme-light .hover\:bg-slate-800:hover { background-color: #F1F5F9; }
+        body.theme-light .hover\:bg-brand-surface\/30:hover { background-color: #F8FAFC; }
+        body.theme-light footer { background-color: #F8FAFC; border-color: #E2E8F0; }
+        body.theme-light footer .text-white { color: #0F172A; }
+        body.theme-light ::-webkit-scrollbar-track { background: #F8FAFC; }
+        body.theme-light ::-webkit-scrollbar-thumb { background: #CBD5E1; }
+        body.theme-light code { background-color: #F1F5F9; color: #1E293B; }
+
+        body.theme-light .border-slate-700\/40 { border-color: #E2E8F0; }
+        body.theme-light a.text-slate-400 { color: #64748B; }
+        body.theme-light a.text-slate-400:hover { color: #1E40AF; background-color: #F1F5F9; }
+    </style>
+</head>
+<body class="antialiased bg-grid-pattern min-h-screen">
+
+    <!-- ==================== TOP NAVIGATION ==================== -->
+    <nav class="nav-glass sticky top-0 z-50 border-b border-slate-800/60">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center h-14 gap-1 overflow-x-auto">
+                <a href="index.html" class="text-lg font-extrabold tracking-tight mr-4 whitespace-nowrap shrink-0">
+                    <span class="text-gradient">IT</span><span class="text-white">Hub</span>
+                </a>
+                <a href="index.html" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors whitespace-nowrap">Home</a>
+                <a href="platform.html" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors whitespace-nowrap">Platform</a>
+                <a href="gemmb.html" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-brand-secondary/20 text-brand-secondary whitespace-nowrap">GEMMB Monitoring</a>
+                <a href="cmdb.html" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors whitespace-nowrap">CMDB configuration</a>
+                <a href="itsm.html" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors whitespace-nowrap">ITSM Services</a>
+                <a href="automation.html" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors whitespace-nowrap">Automation / AI</a>
+                <a href="integration.html" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors whitespace-nowrap">Integration</a>
+                <a href="noc.html" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors whitespace-nowrap">Managed Services</a>
+                <div class="ml-auto shrink-0 flex items-center gap-1 border-l border-slate-700/40 pl-3">
+                    <a href="../gemmb.html" class="px-2 py-1 rounded text-[10px] font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition-colors whitespace-nowrap">简</a>
+                    <a href="../tw/gemmb.html" class="px-2 py-1 rounded text-[10px] font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition-colors whitespace-nowrap">繁</a>
+                    <a href="gemmb.html" class="px-2 py-1 rounded text-[10px] font-semibold bg-brand-primary/20 text-brand-primary font-bold transition-colors whitespace-nowrap">EN</a>
+                </div>
+                <button onclick="toggleTheme()" class="ml-auto shrink-0 w-8 h-8 rounded-lg flex items-center justify-center border border-slate-700/40 hover:border-brand-primary/40 transition-colors" title="Toggle Theme" id="theme-toggle">
+                    <svg id="icon-moon" class="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                    <svg id="icon-sun" class="w-4 h-4 text-yellow-500 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ==================== HERO ==================== -->
+    <header class="relative pt-20 pb-16 overflow-hidden">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[1200px] h-[600px] opacity-15 pointer-events-none">
+            <div class="absolute inset-0 bg-gradient-to-br from-brand-secondary via-blue-600 to-cyan-500 blur-[150px] rounded-full mix-blend-screen"></div>
+        </div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="inline-flex items-center space-x-3 bg-brand-surface border border-slate-700/60 rounded-full px-5 py-2 mb-6 shadow-lg">
+                <span class="relative flex h-2.5 w-2.5">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-secondary opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-brand-secondary"></span>
+                </span>
+                <span class="text-[10px] md:text-xs font-bold tracking-[0.2em] text-slate-300 uppercase whitespace-nowrap">Global Enterprise Monitoring & Management Board</span>
+            </div>
+
+            <h1 class="text-4xl md:text-6xl lg:text-7xl font-black tracking-tight mb-6 leading-[1.1]">
+                GEMMB — global enterprise<br><span class="text-gradient">MonitoringManagementdashboard</span>
+            </h1>
+            <p class="text-lg md:text-xl text-slate-400 mb-12 leading-relaxed max-w-4xl mx-auto">
+                Enterprise-gradeReal-time IT operationsMonitoring，multi-site/multi-region unified management.nativeIntegration <strong class="text-white">100+ globalTechnologyvendors</strong>，coveringFive Monitoring Domains，eliminating full-stack ICT infrastructureMonitoringblind spots.
+            </p>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+                <div class="bg-gradient-glass border-glow-blue rounded-2xl p-5 text-center">
+                    <div class="text-3xl md:text-4xl font-black text-brand-secondary">5</div>
+                    <div class="text-[10px] text-slate-500 uppercase tracking-wider font-bold mt-1">Monitoring Domains</div>
+                </div>
+                <div class="bg-gradient-glass border-glow-blue rounded-2xl p-5 text-center">
+                    <div class="text-3xl md:text-4xl font-black text-brand-primary">100+</div>
+                    <div class="text-[10px] text-slate-500 uppercase tracking-wider font-bold mt-1">Technology vendor integration</div>
+                </div>
+                <div class="bg-gradient-glass border-glow-blue rounded-2xl p-5 text-center">
+                    <div class="text-3xl md:text-4xl font-black text-brand-success">10+</div>
+                    <div class="text-[10px] text-slate-500 uppercase tracking-wider font-bold mt-1">MonitoringCollection Protocols</div>
+                </div>
+                <div class="bg-gradient-glass border-glow-blue rounded-2xl p-5 text-center">
+                    <div class="text-3xl md:text-4xl font-black text-brand-warning">100K+</div>
+                    <div class="text-[10px] text-slate-500 uppercase tracking-wider font-bold mt-1">Device management capacity</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== BREADCRUMB ==================== -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div class="flex items-center gap-2 text-xs text-slate-500">
+            <a href="index.html" class="hover:text-brand-secondary transition-colors">Home</a>
+            <span>/</span>
+            <span class="text-brand-secondary font-semibold">GEMMB Global Monitoring</span>
+        </div>
+    </div>
+
+    <!-- ==================== 5 MONITORING DOMAINS ==================== -->
+    <section class="py-24 border-t border-slate-800 bg-[#070D18] relative overflow-hidden">
+        <div class="absolute left-0 top-1/4 w-[500px] h-[500px] bg-brand-secondary/5 rounded-full blur-[120px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16">
+                <div class="inline-flex items-center space-x-2 bg-brand-surface px-4 py-2 rounded-lg mb-4 border border-slate-700 shadow-md">
+                    <span class="text-brand-secondary font-bold tracking-widest text-xs uppercase">Full-Domain Observability</span>
+                </div>
+                <h2 class="text-3xl md:text-5xl font-black mb-6 tracking-tight">Five Monitoring<span class="text-gradient">domains</span></h2>
+                <p class="text-lg text-slate-400 max-w-4xl mx-auto">GEMMB providesFull-Domain Observability，coveringevery layer of enterprise IT infrastructure. From network devices to public cloud, from security firewalls to databases, all telemetry converges in a unified dashboard.</p>
+            </div>
+
+            <!-- Domain 1: Network & SD-WAN -->
+            <div class="mb-8">
+                <div class="bg-gradient-glass border-glow-blue rounded-2xl p-8">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-xl bg-brand-secondary/20 flex items-center justify-center border border-brand-secondary/40 shrink-0">
+                            <svg class="w-6 h-6 text-brand-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-extrabold text-white">01 — network& SD-WAN</h3>
+                            <p class="text-sm text-slate-400 mt-1">Deep telemetry collection covering enterprise routers, switches, wireless controllers and SD-WAN orchestrators</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4">
+                            <h5 class="text-sm font-bold text-white mb-2">SNMP active polling</h5>
+                            <p class="text-xs text-slate-400">supports SNMP v2c/v3 Protocols，Status/statistics/threshold three-dimensional monitoring, vendor-agnostic design.</p>
+                        </div>
+                        <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4">
+                            <h5 class="text-sm font-bold text-white mb-2">ICMP availability detection</h5>
+                            <p class="text-xs text-slate-400">Real-timeconnectivity checks and latencyMonitoring，supports Trace Route path tracing.</p>
+                        </div>
+                        <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4">
+                            <h5 class="text-sm font-bold text-white mb-2">NetFlow / sFlow traffic analysis</h5>
+                            <p class="text-xs text-slate-400">Multi-dimensional traffic breakdown:Top Talkers、Top Applications、Top Protocols.</p>
+                        </div>
+                        <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4">
+                            <h5 class="text-sm font-bold text-white mb-2">SD-WAN API Integration</h5>
+                            <p class="text-xs text-slate-400">Native API integration with Viptela vManage、Meraki、VeloCloud、Aruba controllers.</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-brand-secondary/10 border border-brand-secondary/20 rounded-lg text-[11px] font-semibold text-brand-secondary">Cisco</span>
+                        <span class="px-3 py-1 bg-brand-secondary/10 border border-brand-secondary/20 rounded-lg text-[11px] font-semibold text-brand-secondary">Cisco Meraki</span>
+                        <span class="px-3 py-1 bg-brand-secondary/10 border border-brand-secondary/20 rounded-lg text-[11px] font-semibold text-brand-secondary">Juniper</span>
+                        <span class="px-3 py-1 bg-brand-secondary/10 border border-brand-secondary/20 rounded-lg text-[11px] font-semibold text-brand-secondary">Huawei</span>
+                        <span class="px-3 py-1 bg-brand-secondary/10 border border-brand-secondary/20 rounded-lg text-[11px] font-semibold text-brand-secondary">H3C</span>
+                        <span class="px-3 py-1 bg-brand-secondary/10 border border-brand-secondary/20 rounded-lg text-[11px] font-semibold text-brand-secondary">Aruba</span>
+                        <span class="px-3 py-1 bg-brand-secondary/10 border border-brand-secondary/20 rounded-lg text-[11px] font-semibold text-brand-secondary">Viptela</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domain 2: Security & Firewall -->
+            <div class="mb-8">
+                <div class="bg-gradient-glass border border-red-500/15 rounded-2xl p-8 hover:border-red-500/40 transition-all duration-300" style="box-shadow: 0 0 15px rgba(239,68,68,0.05);">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-xl bg-red-500/20 flex items-center justify-center border border-red-500/40 shrink-0">
+                            <svg class="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-extrabold text-white">02 — Securityand firewalls</h3>
+                            <p class="text-sm text-slate-400 mt-1">Next-gen firewalls,IDS/IPS andsecurity policy gateways event extraction and Syslog parsing</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4">
+                            <h5 class="text-sm font-bold text-white mb-2">Syslog eventscollection</h5>
+                            <p class="text-xs text-slate-400">SecurityLog encrypted relay forwarding, supporting compliant cold storage 180 days.</p>
+                        </div>
+                        <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4">
+                            <h5 class="text-sm font-bold text-white mb-2">Alert Correlation Analysis</h5>
+                            <p class="text-xs text-slate-400">Cross-security device alert correlation, automatic noise reduction and classification, precise high-risk event delivery.</p>
+                        </div>
+                        <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4">
+                            <h5 class="text-sm font-bold text-white mb-2">Splunk Integration</h5>
+                            <p class="text-xs text-slate-400">SecurityAlerts integrated in real-time to GEMMB dashboard, unified alert view.</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-red-500/10 border border-red-500/20 rounded-lg text-[11px] font-semibold text-red-400">Palo Alto</span>
+                        <span class="px-3 py-1 bg-red-500/10 border border-red-500/20 rounded-lg text-[11px] font-semibold text-red-400">Fortigate</span>
+                        <span class="px-3 py-1 bg-red-500/10 border border-red-500/20 rounded-lg text-[11px] font-semibold text-red-400">Cisco IDS/IPS</span>
+                        <span class="px-3 py-1 bg-red-500/10 border border-red-500/20 rounded-lg text-[11px] font-semibold text-red-400">Sangfor</span>
+                        <span class="px-3 py-1 bg-red-500/10 border border-red-500/20 rounded-lg text-[11px] font-semibold text-red-400">Hillstone</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domain 3: Compute & Storage -->
+            <div class="mb-8">
+                <div class="bg-gradient-glass border border-brand-accent/15 rounded-2xl p-8 hover:border-brand-accent/40 transition-all duration-300" style="box-shadow: 0 0 15px rgba(139,92,246,0.05);">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-xl bg-brand-accent/20 flex items-center justify-center border border-brand-accent/40 shrink-0">
+                            <svg class="w-6 h-6 text-brand-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"></path></svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-extrabold text-white">03 — compute& Storage</h3>
+                            <p class="text-sm text-slate-400 mt-1">Hardware out-of-band management, all-flash arrays and full-stack virtualization metrics collection</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4">
+                            <h5 class="text-sm font-bold text-white mb-2">Virtualization Deep Monitoring</h5>
+                            <p class="text-xs text-slate-400">VMware vSphere API Deep integration, automatically discovering and monitoring VMs, hosts, clusters.</p>
+                        </div>
+                        <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4">
+                            <h5 class="text-sm font-bold text-white mb-2">hardware out-of-bandManagement</h5>
+                            <p class="text-xs text-slate-400">Dell iDRAC、HPE iLO、Cisco UCS Direct hardware status collection via out-of-band management interfaces.</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-brand-accent/10 border border-brand-accent/20 rounded-lg text-[11px] font-semibold text-brand-accent">VMware vSphere</span>
+                        <span class="px-3 py-1 bg-brand-accent/10 border border-brand-accent/20 rounded-lg text-[11px] font-semibold text-brand-accent">Cisco UCS</span>
+                        <span class="px-3 py-1 bg-brand-accent/10 border border-brand-accent/20 rounded-lg text-[11px] font-semibold text-brand-accent">Dell iDRAC</span>
+                        <span class="px-3 py-1 bg-brand-accent/10 border border-brand-accent/20 rounded-lg text-[11px] font-semibold text-brand-accent">HPE iLO</span>
+                        <span class="px-3 py-1 bg-brand-accent/10 border border-brand-accent/20 rounded-lg text-[11px] font-semibold text-brand-accent">NetApp</span>
+                        <span class="px-3 py-1 bg-brand-accent/10 border border-brand-accent/20 rounded-lg text-[11px] font-semibold text-brand-accent">PureStorage</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domain 4: Cloud & DX -->
+            <div class="mb-8">
+                <div class="bg-gradient-glass border border-cyan-500/15 rounded-2xl p-8 hover:border-cyan-500/40 transition-all duration-300" style="box-shadow: 0 0 15px rgba(6,182,212,0.05);">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-xl bg-cyan-500/20 flex items-center justify-center border border-cyan-500/40 shrink-0">
+                            <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-extrabold text-white">04 — Public Cloud& Digital Experience (DEM)</h3>
+                            <p class="text-sm text-slate-400 mt-1">public cloud native API Integration + Cisco ThousandEyes proactive digital experience probes</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4">
+                            <h5 class="text-sm font-bold text-white mb-2">Public Cloud API Monitoring</h5>
+                            <p class="text-xs text-slate-400">native REST API integration AWS、Azure、Alibaba Cloud、Huawei Cloud、Tencent Cloud，Autodiscovering resources.</p>
+                        </div>
+                        <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4">
+                            <h5 class="text-sm font-bold text-white mb-2">Digital Experience Monitoring (DEM)</h5>
+                            <p class="text-xs text-slate-400">ThousandEyes From LAN to SaaS path-level active probing, eliminating"gray failures".</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded-lg text-[11px] font-semibold text-cyan-400">AWS</span>
+                        <span class="px-3 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded-lg text-[11px] font-semibold text-cyan-400">Azure</span>
+                        <span class="px-3 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded-lg text-[11px] font-semibold text-cyan-400">Alibaba Cloud</span>
+                        <span class="px-3 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded-lg text-[11px] font-semibold text-cyan-400">Microsoft 365</span>
+                        <span class="px-3 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded-lg text-[11px] font-semibold text-cyan-400">ThousandEyes</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domain 5: Database & OS Agent -->
+            <div>
+                <div class="bg-gradient-glass border border-brand-success/15 rounded-2xl p-8 hover:border-brand-success/40 transition-all duration-300" style="box-shadow: 0 0 15px rgba(16,185,129,0.05);">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-xl bg-brand-success/20 flex items-center justify-center border border-brand-success/40 shrink-0">
+                            <svg class="w-6 h-6 text-brand-success" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"></path></svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-extrabold text-white">05 — databases& OS Agent</h3>
+                            <p class="text-sm text-slate-400 mt-1">Host-side metrics collection, deep database performance tracking and core Windows Service Monitoring</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4">
+                            <h5 class="text-sm font-bold text-white mb-2">database performance tracking</h5>
+                            <p class="text-xs text-slate-400">ODBC/JDBC connectivity，slow query analysis, connection pool monitoring, tablespace utilization.</p>
+                        </div>
+                        <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4">
+                            <h5 class="text-sm font-bold text-white mb-2">Windows Service Monitoring</h5>
+                            <p class="text-xs text-slate-400">WMI/WinRM collection Windows performance metrics，coreServicesstatusReal-timeMonitoring.</p>
+                        </div>
+                        <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4">
+                            <h5 class="text-sm font-bold text-white mb-2">Lightweight Agent</h5>
+                            <p class="text-xs text-slate-400">Approx. 100MB memory footprint, minimal CPU usage, Web portal centralized configuration.</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-brand-success/10 border border-brand-success/20 rounded-lg text-[11px] font-semibold text-brand-success">MS SQL</span>
+                        <span class="px-3 py-1 bg-brand-success/10 border border-brand-success/20 rounded-lg text-[11px] font-semibold text-brand-success">MySQL</span>
+                        <span class="px-3 py-1 bg-brand-success/10 border border-brand-success/20 rounded-lg text-[11px] font-semibold text-brand-success">Oracle</span>
+                        <span class="px-3 py-1 bg-brand-success/10 border border-brand-success/20 rounded-lg text-[11px] font-semibold text-brand-success">Windows/Linux Agent</span>
+                        <span class="px-3 py-1 bg-brand-success/10 border border-brand-success/20 rounded-lg text-[11px] font-semibold text-brand-success">Windows IIS</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== MONITORING ENGINES ==================== -->
+    <section class="py-24 border-t border-slate-800 bg-[#040914] relative overflow-hidden">
+        <div class="absolute right-0 top-1/3 w-[500px] h-[500px] bg-brand-primary/5 rounded-full blur-[120px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16">
+                <div class="inline-flex items-center space-x-2 bg-brand-surface px-4 py-2 rounded-lg mb-4 border border-slate-700 shadow-md">
+                    <span class="text-brand-primary font-bold tracking-widest text-xs uppercase">MonitoringEngine</span>
+                </div>
+                <h2 class="text-3xl md:text-5xl font-black mb-6 tracking-tight">Deep Monitoring Engines<span class="text-gradient-accent">details</span></h2>
+                <p class="text-lg text-slate-400 max-w-4xl mx-auto">GEMMB Built-in professional monitoring engines, each validated in large-scale production environments, providing fine-grained data collection and analysis capabilities.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- SNMP Engine -->
+                <div class="bg-gradient-glass border-glow-blue rounded-2xl p-8">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="w-10 h-10 rounded-lg bg-brand-secondary/20 flex items-center justify-center border border-brand-secondary/40">
+                            <svg class="w-5 h-5 text-brand-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path></svg>
+                        </div>
+                        <h3 class="text-lg font-extrabold text-white">SNMP MonitoringEngine</h3>
+                    </div>
+                    <p class="text-sm text-slate-400 mb-4">Highly configurable SNMP polling engine, vendor-agnostic design, monitoring any device supporting SNMP .</p>
+                    <ul class="space-y-2.5 text-xs text-slate-400">
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-secondary rounded-full mt-1.5 mr-2.5 shrink-0"></span>Status, statistics, threshold three-dimensional monitoring</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-secondary rounded-full mt-1.5 mr-2.5 shrink-0"></span>Flexibleentity model，Autodiscovering devicesLayerand dependencies</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-secondary rounded-full mt-1.5 mr-2.5 shrink-0"></span>Built-in remote troubleshooting tools:SNMP real-time query,Ping、Trace Route</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-secondary rounded-full mt-1.5 mr-2.5 shrink-0"></span>Detailed data analysis navigation tree, supporting"Busy hour analysis"</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-secondary rounded-full mt-1.5 mr-2.5 shrink-0"></span>supports SNMP v1/v2c/v3，Trap alert reception</li>
+                    </ul>
+                </div>
+
+                <!-- HTTP Engine -->
+                <div class="bg-gradient-glass border border-cyan-500/15 rounded-2xl p-8 hover:border-cyan-500/40 transition-all duration-300" style="box-shadow: 0 0 15px rgba(6,182,212,0.05);">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="w-10 h-10 rounded-lg bg-cyan-500/20 flex items-center justify-center border border-cyan-500/40">
+                            <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+                        </div>
+                        <h3 class="text-lg font-extrabold text-white">HTTP MonitoringEngine</h3>
+                    </div>
+                    <p class="text-sm text-slate-400 mb-4">HTTP protocol health checks and performance for websites / web services / web applications. HTTP Protocolshealth checks and performanceMonitoring.</p>
+                    <ul class="space-y-2.5 text-xs text-slate-400">
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-cyan-400 rounded-full mt-1.5 mr-2.5 shrink-0"></span>Customizable script engine, polling multiple content types</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-cyan-400 rounded-full mt-1.5 mr-2.5 shrink-0"></span>HTTP Response status and performance statistics (total response time, content type breakdown)</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-cyan-400 rounded-full mt-1.5 mr-2.5 shrink-0"></span>SSL Certificate monitoring: expiration alerts, name mismatch alerts, outdated protocol detection</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-cyan-400 rounded-full mt-1.5 mr-2.5 shrink-0"></span>supports HTTP/HTTPS Protocols，Configurable request headers and authentication</li>
+                    </ul>
+                </div>
+
+                <!-- DNS Engine -->
+                <div class="bg-gradient-glass border border-brand-warning/15 rounded-2xl p-8 hover:border-brand-warning/40 transition-all duration-300" style="box-shadow: 0 0 15px rgba(245,158,11,0.05);">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="w-10 h-10 rounded-lg bg-brand-warning/20 flex items-center justify-center border border-brand-warning/40">
+                            <svg class="w-5 h-5 text-brand-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 21h7a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v11m0 5l4.879-4.879m0 0a3 3 0 104.243-4.242 3 3 0 00-4.243 4.242z"></path></svg>
+                        </div>
+                        <h3 class="text-lg font-extrabold text-white">DNS MonitoringEngine</h3>
+                    </div>
+                    <p class="text-sm text-slate-400 mb-4">Comprehensive DNS resolution service monitoring, supporting all mainstream DNS record types.</p>
+                    <ul class="space-y-2.5 text-xs text-slate-400">
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-warning rounded-full mt-1.5 mr-2.5 shrink-0"></span>supports A、MX、NS、URI、CNAME 等All mainstreamrecord types</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-warning rounded-full mt-1.5 mr-2.5 shrink-0"></span>query results and preconfiguration值Autocomparison，abnormal triggers alerts</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-warning rounded-full mt-1.5 mr-2.5 shrink-0"></span>DNS Group management, supporting dynamic IP address devices</li>
+                    </ul>
+                </div>
+
+                <!-- NetFlow/sFlow Engine -->
+                <div class="bg-gradient-glass border border-brand-accent/15 rounded-2xl p-8 hover:border-brand-accent/40 transition-all duration-300" style="box-shadow: 0 0 15px rgba(139,92,246,0.05);">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="w-10 h-10 rounded-lg bg-brand-accent/20 flex items-center justify-center border border-brand-accent/40">
+                            <svg class="w-5 h-5 text-brand-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                        </div>
+                        <h3 class="text-lg font-extrabold text-white">NetFlow / sFlow traffic analysis</h3>
+                    </div>
+                    <p class="text-sm text-slate-400 mb-4">Multi-dimensional network traffic visualization analysis, supporting NetFlow v5/v9 and sFlow protocols.</p>
+                    <ul class="space-y-2.5 text-xs text-slate-400">
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-accent rounded-full mt-1.5 mr-2.5 shrink-0"></span>Top Talkers、Top Listeners、Top Conversations</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-accent rounded-full mt-1.5 mr-2.5 shrink-0"></span>Top Applications、Top Protocols、Top TOS</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-accent rounded-full mt-1.5 mr-2.5 shrink-0"></span>NetFlow Relay Relay function, data forwarding to third-party systems</li>
+                    </ul>
+                </div>
+
+                <!-- Syslog Engine -->
+                <div class="bg-gradient-glass border border-red-500/15 rounded-2xl p-8 hover:border-red-500/40 transition-all duration-300 lg:col-span-2" style="box-shadow: 0 0 15px rgba(239,68,68,0.05);">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="w-10 h-10 rounded-lg bg-red-500/20 flex items-center justify-center border border-red-500/40">
+                            <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        </div>
+                        <h3 class="text-lg font-extrabold text-white">Syslog logsManagement</h3>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <p class="text-sm text-slate-400 mb-4">Distributed Poller high-density collection Syslog，supporting full-text search and custom filtering.</p>
+                            <ul class="space-y-2.5 text-xs text-slate-400">
+                                <li class="flex items-start"><span class="w-1.5 h-1.5 bg-red-400 rounded-full mt-1.5 mr-2.5 shrink-0"></span>Based on Syslog automatic alert generation</li>
+                                <li class="flex items-start"><span class="w-1.5 h-1.5 bg-red-400 rounded-full mt-1.5 mr-2.5 shrink-0"></span>Log collection storage and full-text search</li>
+                                <li class="flex items-start"><span class="w-1.5 h-1.5 bg-red-400 rounded-full mt-1.5 mr-2.5 shrink-0"></span>C# Script-based custom filtering rules</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4">
+                                <h5 class="text-sm font-bold text-white mb-2">Syslog Relay relay</h5>
+                                <p class="text-xs text-slate-400">supportsPer-customer/device granular forwarding control, encrypted forwarding to compliant cold storage, meeting MLPS 2.0 mandated 180-day raw log storage requirements.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SMART MONITORING + CONFIGURE HARVEST ==================== -->
+    <section class="py-24 border-t border-slate-800 bg-[#070D18] relative overflow-hidden">
+        <div class="absolute left-0 bottom-0 w-[500px] h-[500px] bg-brand-success/5 rounded-full blur-[120px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Smart Monitoring -->
+                <div class="bg-gradient-glass border border-brand-success/15 rounded-2xl p-8 hover:border-brand-success/40 transition-all duration-300" style="box-shadow: 0 0 15px rgba(16,185,129,0.05);">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="w-10 h-10 rounded-lg bg-brand-success/20 flex items-center justify-center border border-brand-success/40">
+                            <svg class="w-5 h-5 text-brand-success" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        </div>
+                        <h3 class="text-lg font-extrabold text-white">Smart Monitoring Smart Monitoring</h3>
+                    </div>
+                    <p class="text-sm text-slate-400 mb-6">Intelligently reduces ticket volume, effectively filtering intermittent jitter alerts and reducing invalid tickets.</p>
+
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-brand-success/10 flex items-center justify-center border border-brand-success/20 shrink-0 mt-0.5">
+                                <span class="text-xs font-black text-brand-success">1</span>
+                            </div>
+                            <div>
+                                <h5 class="text-sm font-bold text-white">abnormal entering"observation"status</h5>
+                                <p class="text-xs text-slate-400 mt-1">Abnormal alerts do not immediately create tickets, but enter an observation period</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-brand-success/10 flex items-center justify-center border border-brand-success/20 shrink-0 mt-0.5">
+                                <span class="text-xs font-black text-brand-success">2</span>
+                            </div>
+                            <div>
+                                <h5 class="text-sm font-bold text-white">Automatic judgment within the observation period</h5>
+                                <p class="text-xs text-slate-400 mt-1">recovery to normal → Auto-close; timeout without recovery → Severity levels by status</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-brand-success/10 flex items-center justify-center border border-brand-success/20 shrink-0 mt-0.5">
+                                <span class="text-xs font-black text-brand-success">3</span>
+                            </div>
+                            <div>
+                                <h5 class="text-sm font-bold text-white">Effectively filtering noise</h5>
+                                <p class="text-xs text-slate-400 mt-1">Intermittent jitter alerts are filtered, only persistent failures create tickets</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Configure Harvest -->
+                <div class="bg-gradient-glass border border-brand-warning/15 rounded-2xl p-8 hover:border-brand-warning/40 transition-all duration-300" style="box-shadow: 0 0 15px rgba(245,158,11,0.05);">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="w-10 h-10 rounded-lg bg-brand-warning/20 flex items-center justify-center border border-brand-warning/40">
+                            <svg class="w-5 h-5 text-brand-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        </div>
+                        <h3 class="text-lg font-extrabold text-white">Configure Harvest configurationcollection</h3>
+                    </div>
+                    <p class="text-sm text-slate-400 mb-6">Scheduled network device configuration version collection, automatic change comparison, proactive alerts for unauthorized changes.</p>
+
+                    <div class="space-y-4">
+                        <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4">
+                            <h5 class="text-sm font-bold text-white mb-2">Flexible Script Engine</h5>
+                            <p class="text-xs text-slate-400">supportsVia Telnet、SSH 或 SNMP+TFTP device configuration collection.</p>
+                        </div>
+                        <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4">
+                            <h5 class="text-sm font-bold text-white mb-2">Historical version comparison</h5>
+                            <p class="text-xs text-slate-400">Configuration documents auto-saved and compared line-by-line with historical versions, clearly showing change differences.</p>
+                        </div>
+                        <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4">
+                            <h5 class="text-sm font-bold text-white mb-2">Scheduled execution</h5>
+                            <p class="text-xs text-slate-400">Can be scheduled daily to prevent configuration drift and ensure compliance baselines.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Network Topology -->
+            <div class="mt-8 bg-gradient-glass border-glow-blue rounded-2xl p-8">
+                <div class="flex items-center gap-3 mb-5">
+                    <div class="w-10 h-10 rounded-lg bg-brand-secondary/20 flex items-center justify-center border border-brand-secondary/40">
+                        <svg class="w-5 h-5 text-brand-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"></path></svg>
+                    </div>
+                    <h3 class="text-lg font-extrabold text-white">networkTopology discovery and root cause analysis</h3>
+                </div>
+                <p class="text-sm text-slate-400 mb-4">Automatically discovers polling topology and dependencies of managed devices with dynamic topology visualization. Integrated service desk for root cause analysis: when multiple devices are unreachable, automatically correlates them into a single incident ticket, preventing alert storms.</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4 text-center">
+                        <div class="text-2xl font-black text-brand-secondary">Auto</div>
+                        <div class="text-[10px] text-slate-500 font-bold uppercase mt-1">Automatic topology discovery</div>
+                    </div>
+                    <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4 text-center">
+                        <div class="text-2xl font-black text-brand-success">RCA</div>
+                        <div class="text-[10px] text-slate-500 font-bold uppercase mt-1">root cause correlation analysis</div>
+                    </div>
+                    <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4 text-center">
+                        <div class="text-2xl font-black text-brand-warning">-90%</div>
+                        <div class="text-[10px] text-slate-500 font-bold uppercase mt-1">Alert storm suppression</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== DISTRIBUTED POLLER ==================== -->
+    <section class="py-24 border-t border-slate-800 bg-[#040914] relative overflow-hidden">
+        <div class="absolute right-0 top-1/4 w-[500px] h-[500px] bg-brand-accent/5 rounded-full blur-[120px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16">
+                <div class="inline-flex items-center space-x-2 bg-brand-surface px-4 py-2 rounded-lg mb-4 border border-slate-700 shadow-md">
+                    <span class="text-brand-accent font-bold tracking-widest text-xs uppercase">Distributedcollection</span>
+                </div>
+                <h2 class="text-3xl md:text-5xl font-black mb-6 tracking-tight">Distributed Poller <span class="text-gradient-accent">architecture</span></h2>
+                <p class="text-lg text-slate-400 max-w-4xl mx-auto">Leveraging highly scalable distributed monitoring mechanisms,GEMMB deploys unified Poller agents across customer multi-region or branch networks, supporting multi-tenant and high-security encrypted communication.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+                <div class="bg-gradient-glass border-glow-blue rounded-2xl p-6">
+                    <div class="w-10 h-10 rounded-lg bg-brand-accent/20 flex items-center justify-center border border-brand-accent/40 mb-4">
+                        <svg class="w-5 h-5 text-brand-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                    </div>
+                    <h4 class="text-sm font-extrabold text-white mb-2">multi-tenant VRF isolation</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">Each Poller supports multi-tenant deployment, monitoring data between different customers/departments is absolutely isolated at the network level.</p>
+                </div>
+
+                <div class="bg-gradient-glass border-glow-blue rounded-2xl p-6">
+                    <div class="w-10 h-10 rounded-lg bg-brand-success/20 flex items-center justify-center border border-brand-success/40 mb-4">
+                        <svg class="w-5 h-5 text-brand-success" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                    </div>
+                    <h4 class="text-sm font-extrabold text-white mb-2">SSL encrypted communication</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">Poller All communications between SSL/TLS and the central platform are SSL/TLS encrypted, preventing data interception during transmission.</p>
+                </div>
+
+                <div class="bg-gradient-glass border-glow-blue rounded-2xl p-6">
+                    <div class="w-10 h-10 rounded-lg bg-brand-secondary/20 flex items-center justify-center border border-brand-secondary/40 mb-4">
+                        <svg class="w-5 h-5 text-brand-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                    </div>
+                    <h4 class="text-sm font-extrabold text-white mb-2">Elastic Topology Scaling</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">Seamlessly scales from micro-branches to multinational cloud environments,Master Poller architecture supports global distributed deployment, single virtual Poller supports multiple customers.</p>
+                </div>
+
+                <div class="bg-gradient-glass border-glow-blue rounded-2xl p-6">
+                    <div class="w-10 h-10 rounded-lg bg-brand-warning/20 flex items-center justify-center border border-brand-warning/40 mb-4">
+                        <svg class="w-5 h-5 text-brand-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    </div>
+                    <h4 class="text-sm font-extrabold text-white mb-2">Remote centralized management</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">supportsRemote centralized management and configuration distribution, no need for on-site personnel at each node. Built-in watchdog auto-recovers software failures.</p>
+                </div>
+            </div>
+
+            <!-- Poller Deployment Info -->
+            <div class="mt-8 bg-brand-card/40 border border-slate-700/30 rounded-2xl p-6 md:p-8">
+                <h4 class="text-sm font-extrabold text-white mb-4">Poller Deployment & Configuration Capabilities</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="flex items-start gap-3">
+                        <span class="w-1.5 h-1.5 bg-brand-secondary rounded-full mt-1.5 shrink-0"></span>
+                        <span class="text-xs text-slate-400">supports Windows、Linux and Docker deployment</span>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <span class="w-1.5 h-1.5 bg-brand-secondary rounded-full mt-1.5 shrink-0"></span>
+                        <span class="text-xs text-slate-400">Flexible allocation by customer, region, location or device level</span>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <span class="w-1.5 h-1.5 bg-brand-secondary rounded-full mt-1.5 shrink-0"></span>
+                        <span class="text-xs text-slate-400">Role-based Poller management, supporting delegated deployment</span>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <span class="w-1.5 h-1.5 bg-brand-secondary rounded-full mt-1.5 shrink-0"></span>
+                        <span class="text-xs text-slate-400">Configurable Ping silent time,SNMP polling interval</span>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <span class="w-1.5 h-1.5 bg-brand-secondary rounded-full mt-1.5 shrink-0"></span>
+                        <span class="text-xs text-slate-400">HTTP Configurable polling intervals and protocol ports</span>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <span class="w-1.5 h-1.5 bg-brand-secondary rounded-full mt-1.5 shrink-0"></span>
+                        <span class="text-xs text-slate-400">Statistical aggregation cycles, built-in watchdog mechanism</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SERVER AGENTS ==================== -->
+    <section class="py-24 border-t border-slate-800 bg-[#070D18] relative overflow-hidden">
+        <div class="absolute left-0 top-1/3 w-[500px] h-[500px] bg-cyan-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16">
+                <div class="inline-flex items-center space-x-2 bg-brand-surface px-4 py-2 rounded-lg mb-4 border border-slate-700 shadow-md">
+                    <span class="text-cyan-400 font-bold tracking-widest text-xs uppercase">Server Management</span>
+                </div>
+                <h2 class="text-3xl md:text-5xl font-black mb-6 tracking-tight">Services器 Agent <span class="text-gradient">DeepManagement</span></h2>
+                <p class="text-lg text-slate-400 max-w-4xl mx-auto">Through lightweight Windows / Linux Agent enabling deep server monitoring and remote management, covering the full management spectrum from metrics collection to remote desktop, event logs to script execution.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Agent Monitoring -->
+                <div class="bg-gradient-glass border-glow-blue rounded-2xl p-6">
+                    <div class="w-10 h-10 rounded-lg bg-brand-secondary/20 flex items-center justify-center border border-brand-secondary/40 mb-4">
+                        <svg class="w-5 h-5 text-brand-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path></svg>
+                    </div>
+                    <h4 class="text-sm font-extrabold text-white mb-2">Windows / Linux Agent</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed mb-3">Lightweight deployment (approx. 100MB memory, minimal CPU usage), via Web portal centralized configuration.</p>
+                    <ul class="space-y-2 text-xs text-slate-400">
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-secondary rounded-full mt-1 mr-2 shrink-0"></span>Flexible scripted monitoring engine</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-secondary rounded-full mt-1 mr-2 shrink-0"></span>Status/statistics/threshold monitoring and alert generation</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-secondary rounded-full mt-1 mr-2 shrink-0"></span>Global default config + per-item override</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-secondary rounded-full mt-1 mr-2 shrink-0"></span>custom time-period thresholds</li>
+                    </ul>
+                </div>
+
+                <!-- Remote Desktop -->
+                <div class="bg-gradient-glass border-glow-blue rounded-2xl p-6">
+                    <div class="w-10 h-10 rounded-lg bg-cyan-500/20 flex items-center justify-center border border-cyan-500/40 mb-4">
+                        <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <h4 class="text-sm font-extrabold text-white mb-2">Windows Remote Desktop</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed mb-3">Instant (Just-in-Time) remote desktop access, perfect combination of security and convenience.</p>
+                    <ul class="space-y-2 text-xs text-slate-400">
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-cyan-400 rounded-full mt-1 mr-2 shrink-0"></span>Auto-joins remote desktop user group before connection</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-cyan-400 rounded-full mt-1 mr-2 shrink-0"></span>Auto-removes permissions after connection ends</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-cyan-400 rounded-full mt-1 mr-2 shrink-0"></span>Optional local admin group membership</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-cyan-400 rounded-full mt-1 mr-2 shrink-0"></span>Password vault integration</li>
+                    </ul>
+                </div>
+
+                <!-- Desktop Sharing -->
+                <div class="bg-gradient-glass border-glow-blue rounded-2xl p-6">
+                    <div class="w-10 h-10 rounded-lg bg-brand-accent/20 flex items-center justify-center border border-brand-accent/40 mb-4">
+                        <svg class="w-5 h-5 text-brand-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                    </div>
+                    <h4 class="text-sm font-extrabold text-white mb-2">Windows desktop sharing</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed mb-3">Via Server Agent enabling secure desktop sharing on hosts, supporting Connector clients.</p>
+                    <ul class="space-y-2 text-xs text-slate-400">
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-accent rounded-full mt-1 mr-2 shrink-0"></span>View-only or interactive control mode</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-accent rounded-full mt-1 mr-2 shrink-0"></span>customAccess permission levels</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-accent rounded-full mt-1 mr-2 shrink-0"></span>supportsSecurityDesktop (UAC) view and interaction</li>
+                    </ul>
+                </div>
+
+                <!-- Event Log -->
+                <div class="bg-gradient-glass border-glow-blue rounded-2xl p-6">
+                    <div class="w-10 h-10 rounded-lg bg-brand-warning/20 flex items-center justify-center border border-brand-warning/40 mb-4">
+                        <svg class="w-5 h-5 text-brand-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                    </div>
+                    <h4 class="text-sm font-extrabold text-white mb-2">Windows Event LogsMonitoring</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed mb-3">Flexible selection of monitored event logs and event levels for fine-grained filtering.</p>
+                    <ul class="space-y-2 text-xs text-slate-400">
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-warning rounded-full mt-1 mr-2 shrink-0"></span>Event ID filtering (include/exclude/range)</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-warning rounded-full mt-1 mr-2 shrink-0"></span>Event summarization: merging identical events within the same window</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-warning rounded-full mt-1 mr-2 shrink-0"></span>Event filtering scripts, custom alert text</li>
+                    </ul>
+                </div>
+
+                <!-- Shell Scripts -->
+                <div class="bg-gradient-glass border-glow-blue rounded-2xl p-6">
+                    <div class="w-10 h-10 rounded-lg bg-brand-success/20 flex items-center justify-center border border-brand-success/40 mb-4">
+                        <svg class="w-5 h-5 text-brand-success" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                    </div>
+                    <h4 class="text-sm font-extrabold text-white mb-2">Shell Scripts & System Updates</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed mb-3">Directly in the Web execute Shell / PowerShell scripts without SSH login.</p>
+                    <ul class="space-y-2 text-xs text-slate-400">
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-success rounded-full mt-1 mr-2 shrink-0"></span>Online execution of Shell / PowerShell scripts</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-success rounded-full mt-1 mr-2 shrink-0"></span>Windows Update Expiration update alerts</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-success rounded-full mt-1 mr-2 shrink-0"></span>Auto-install updates / manual check and download</li>
+                    </ul>
+                </div>
+
+                <!-- Custom KPI Dashboard -->
+                <div class="bg-gradient-glass border-glow-blue rounded-2xl p-6">
+                    <div class="w-10 h-10 rounded-lg bg-red-500/20 flex items-center justify-center border border-red-500/40 mb-4">
+                        <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                    </div>
+                    <h4 class="text-sm font-extrabold text-white mb-2">custom KPI dashboard</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed mb-3">Drag-and-drop dashboards, supporting multi-dimensional data visualization.</p>
+                    <ul class="space-y-2 text-xs text-slate-400">
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-red-400 rounded-full mt-1 mr-2 shrink-0"></span>Role-based custom monitoring views</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-red-400 rounded-full mt-1 mr-2 shrink-0"></span>CIO Overview / Engineer details</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-red-400 rounded-full mt-1 mr-2 shrink-0"></span>SLA Automatic compliance rate tracking</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== PROTOCOL TABLE ==================== -->
+    <section class="py-24 border-t border-slate-800 bg-[#040914] relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16">
+                <div class="inline-flex items-center space-x-2 bg-brand-surface px-4 py-2 rounded-lg mb-4 border border-slate-700 shadow-md">
+                    <span class="text-brand-secondary font-bold tracking-widest text-xs uppercase">Protocolsoverview</span>
+                </div>
+                <h2 class="text-3xl md:text-5xl font-black mb-6 tracking-tight">MonitoringProtocols与<span class="text-gradient">Technology</span></h2>
+                <p class="text-lg text-slate-400 max-w-4xl mx-auto">GEMMB supportsAll mainstream IT monitoring protocols and technologies, covering the full stack from traditional networks to modern cloud platforms.</p>
+            </div>
+
+            <div class="bg-gradient-glass border border-slate-700/40 rounded-2xl overflow-hidden shadow-xl">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="bg-brand-surface/80 border-b border-slate-700/60">
+                                <th class="px-6 py-4 text-left text-xs font-bold text-brand-secondary uppercase tracking-wider">Protocols / Technology</th>
+                                <th class="px-6 py-4 text-left text-xs font-bold text-brand-secondary uppercase tracking-wider">Use Cases</th>
+                                <th class="px-6 py-4 text-left text-xs font-bold text-brand-secondary uppercase tracking-wider">Use Cases</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-700/30">
+                            <tr class="hover:bg-brand-surface/30 transition-colors">
+                                <td class="px-6 py-3.5 font-semibold text-white">SNMP v1/v2c/v3</td>
+                                <td class="px-6 py-3.5 text-slate-400">device status polling、Trap alert reception</td>
+                                <td class="px-6 py-3.5 text-slate-500">networkDevices, server hardware</td>
+                            </tr>
+                            <tr class="hover:bg-brand-surface/30 transition-colors">
+                                <td class="px-6 py-3.5 font-semibold text-white">ICMP / Trace</td>
+                                <td class="px-6 py-3.5 text-slate-400">networkConnectivity and path tracing</td>
+                                <td class="px-6 py-3.5 text-slate-500">All IP devices</td>
+                            </tr>
+                            <tr class="hover:bg-brand-surface/30 transition-colors">
+                                <td class="px-6 py-3.5 font-semibold text-white">NetFlow v5/v9 / sFlow</td>
+                                <td class="px-6 py-3.5 text-slate-400">traffic analysis& Bandwidth Monitoring</td>
+                                <td class="px-6 py-3.5 text-slate-500">routingrouters, switches</td>
+                            </tr>
+                            <tr class="hover:bg-brand-surface/30 transition-colors">
+                                <td class="px-6 py-3.5 font-semibold text-white">Syslog</td>
+                                <td class="px-6 py-3.5 text-slate-400">Log collection and event alerting</td>
+                                <td class="px-6 py-3.5 text-slate-500">networkDevices, firewalls, servers</td>
+                            </tr>
+                            <tr class="hover:bg-brand-surface/30 transition-colors">
+                                <td class="px-6 py-3.5 font-semibold text-white">HTTP / HTTPS</td>
+                                <td class="px-6 py-3.5 text-slate-400">Web Service & SSL Certificate Monitoring</td>
+                                <td class="px-6 py-3.5 text-slate-500">Websites, web applications, APIs</td>
+                            </tr>
+                            <tr class="hover:bg-brand-surface/30 transition-colors">
+                                <td class="px-6 py-3.5 font-semibold text-white">DNS</td>
+                                <td class="px-6 py-3.5 text-slate-400">DNS parsingService Monitoring</td>
+                                <td class="px-6 py-3.5 text-slate-500">DNS Services器</td>
+                            </tr>
+                            <tr class="hover:bg-brand-surface/30 transition-colors">
+                                <td class="px-6 py-3.5 font-semibold text-white">WMI / WinRM</td>
+                                <td class="px-6 py-3.5 text-slate-400">Windows performance metrics collection</td>
+                                <td class="px-6 py-3.5 text-slate-500">Windows Services器</td>
+                            </tr>
+                            <tr class="hover:bg-brand-surface/30 transition-colors">
+                                <td class="px-6 py-3.5 font-semibold text-white">SSH / Telnet</td>
+                                <td class="px-6 py-3.5 text-slate-400">Configure Harvest</td>
+                                <td class="px-6 py-3.5 text-slate-500">network devices</td>
+                            </tr>
+                            <tr class="hover:bg-brand-surface/30 transition-colors">
+                                <td class="px-6 py-3.5 font-semibold text-white">REST API</td>
+                                <td class="px-6 py-3.5 text-slate-400">Cloud / SaaS / SD-WAN integration</td>
+                                <td class="px-6 py-3.5 text-slate-500">AWS、Azure、M365、Viptela</td>
+                            </tr>
+                            <tr class="hover:bg-brand-surface/30 transition-colors">
+                                <td class="px-6 py-3.5 font-semibold text-white">VMware API</td>
+                                <td class="px-6 py-3.5 text-slate-400">Virtualization Deep Monitoring</td>
+                                <td class="px-6 py-3.5 text-slate-500">vSphere clusters</td>
+                            </tr>
+                            <tr class="hover:bg-brand-surface/30 transition-colors">
+                                <td class="px-6 py-3.5 font-semibold text-white">ODBC / JDBC</td>
+                                <td class="px-6 py-3.5 text-slate-400">database performance tracking</td>
+                                <td class="px-6 py-3.5 text-slate-500">SQL Server、MySQL、Oracle</td>
+                            </tr>
+                            <tr class="hover:bg-brand-surface/30 transition-colors">
+                                <td class="px-6 py-3.5 font-semibold text-white">TACACS+</td>
+                                <td class="px-6 py-3.5 text-slate-400">networkDevice AAA authentication audit</td>
+                                <td class="px-6 py-3.5 text-slate-500">Cisco and other network devices</td>
+                            </tr>
+                            <tr class="hover:bg-brand-surface/30 transition-colors">
+                                <td class="px-6 py-3.5 font-semibold text-white">TCP</td>
+                                <td class="px-6 py-3.5 text-slate-400">Port and service availability detection</td>
+                                <td class="px-6 py-3.5 text-slate-500">All TCP services</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- API Polling Note -->
+            <div class="mt-8 bg-gradient-to-r from-brand-secondary/10 to-cyan-500/10 border border-brand-secondary/20 rounded-2xl p-6 md:p-8">
+                <div class="flex items-start gap-4">
+                    <div class="w-10 h-10 rounded-lg bg-brand-secondary/20 flex items-center justify-center border border-brand-secondary/40 shrink-0 mt-1">
+                        <svg class="w-5 h-5 text-brand-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-extrabold text-white mb-2">API Polling — Cloud Platforms & SD-WAN Controllers</h4>
+                        <p class="text-xs text-slate-400 leading-relaxed mb-3">supportsThrough native API monitoring of mainstream cloud platforms and SD-WAN controllers, automatically discovering devices and importing them into platform monitoring. Supports multiple authentication methods with customizable polling scripts.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-2.5 py-1 bg-brand-card border border-slate-700/40 rounded-lg text-[10px] font-semibold text-slate-400">AWS</span>
+                            <span class="px-2.5 py-1 bg-brand-card border border-slate-700/40 rounded-lg text-[10px] font-semibold text-slate-400">Azure</span>
+                            <span class="px-2.5 py-1 bg-brand-card border border-slate-700/40 rounded-lg text-[10px] font-semibold text-slate-400">Alibaba Cloud</span>
+                            <span class="px-2.5 py-1 bg-brand-card border border-slate-700/40 rounded-lg text-[10px] font-semibold text-slate-400">Huawei Cloud</span>
+                            <span class="px-2.5 py-1 bg-brand-card border border-slate-700/40 rounded-lg text-[10px] font-semibold text-slate-400">Tencent Cloud</span>
+                            <span class="px-2.5 py-1 bg-brand-card border border-slate-700/40 rounded-lg text-[10px] font-semibold text-slate-400">Viptela vManage</span>
+                            <span class="px-2.5 py-1 bg-brand-card border border-slate-700/40 rounded-lg text-[10px] font-semibold text-slate-400">Meraki</span>
+                            <span class="px-2.5 py-1 bg-brand-card border border-slate-700/40 rounded-lg text-[10px] font-semibold text-slate-400">Aruba</span>
+                            <span class="px-2.5 py-1 bg-brand-card border border-slate-700/40 rounded-lg text-[10px] font-semibold text-slate-400">VeloCloud</span>
+                            <span class="px-2.5 py-1 bg-brand-card border border-slate-700/40 rounded-lg text-[10px] font-semibold text-slate-400">VMware vCenter</span>
+                            <span class="px-2.5 py-1 bg-brand-card border border-slate-700/40 rounded-lg text-[10px] font-semibold text-slate-400">Dell OpenManage</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="py-16 text-center bg-brand-dark border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-lg font-extrabold text-white mb-4"><span class="text-gradient">IT</span>Hub Platform</div>
+            <p class="text-sm text-slate-500 mb-6">Logicalis China — Global ICT Solutions & Managed Services Provider · Architects of Change</p>
+            <div class="flex flex-wrap justify-center gap-4 mb-8">
+                <a href="platform.html" class="text-xs text-slate-400 hover:text-slate-300 transition-colors">Platform</a>
+                <a href="gemmb.html" class="text-xs text-slate-400 hover:text-brand-secondary transition-colors">GEMMB Monitoring</a>
+                <a href="cmdb.html" class="text-xs text-slate-400 hover:text-brand-warning transition-colors">CMDB configuration</a>
+                <a href="itsm.html" class="text-xs text-slate-400 hover:text-brand-accent transition-colors">ITSM Services</a>
+                <a href="automation.html" class="text-xs text-slate-400 hover:text-brand-success transition-colors">Automation / AI</a>
+                <a href="integration.html" class="text-xs text-slate-400 hover:text-cyan-400 transition-colors">Integration</a>
+                <a href="noc.html" class="text-xs text-slate-400 hover:text-red-400 transition-colors">Managed Services</a>
+            </div>
+            <p class="text-[10px] font-bold text-slate-600 uppercase tracking-widest">&copy; 2026 Logicalis China · All Rights Reserved</p>
+        </div>
+    </footer>
+
+
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            const isLight = body.classList.toggle('theme-light');
+            body.classList.toggle('bg-grid-pattern', !isLight);
+            localStorage.setItem('ithub-theme', isLight ? 'light' : 'dark');
+            document.getElementById('icon-moon').classList.toggle('hidden', isLight);
+            document.getElementById('icon-sun').classList.toggle('hidden', !isLight);
+        }
+        (function() {
+            if (localStorage.getItem('ithub-theme') === 'light') {
+                document.body.classList.add('theme-light');
+                document.body.classList.remove('bg-grid-pattern');
+                var moon = document.getElementById('icon-moon');
+                var sun = document.getElementById('icon-sun');
+                if (moon && sun) { moon.classList.add('hidden'); sun.classList.remove('hidden'); }
+            }
+        })();
+    </script>
+</body>
+</html>

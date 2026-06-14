@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ITSM 服務管理 | ITHub — Logicalis 網贏</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            dark: '#030712',
+                            card: '#0F172A',
+                            surface: '#1E293B',
+                            primary: '#00F0FF',
+                            secondary: '#3B82F6',
+                            accent: '#8B5CF6',
+                            success: '#10B981',
+                            warning: '#F59E0B'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #030712; color: #F8FAFC; overflow-x: hidden; }
+        .text-gradient { background: linear-gradient(135deg, #00F0FF 0%, #3B82F6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .text-gradient-accent { background: linear-gradient(135deg, #8B5CF6 0%, #00F0FF 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .bg-gradient-glass { background: linear-gradient(145deg, rgba(15, 23, 42, 0.8) 0%, rgba(3, 7, 18, 0.9) 100%); backdrop-filter: blur(16px); }
+        .border-glow { border: 1px solid rgba(0, 240, 255, 0.15); box-shadow: inset 0 0 20px rgba(0, 240, 255, 0.02), 0 0 15px rgba(0, 240, 255, 0.05); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .border-glow:hover { border-color: rgba(0, 240, 255, 0.6); box-shadow: inset 0 0 20px rgba(0, 240, 255, 0.05), 0 0 30px rgba(0, 240, 255, 0.2); transform: translateY(-4px); }
+        .border-glow-accent { border: 1px solid rgba(139, 92, 246, 0.2); box-shadow: inset 0 0 20px rgba(139, 92, 246, 0.02), 0 0 15px rgba(139, 92, 246, 0.05); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .border-glow-accent:hover { border-color: rgba(139, 92, 246, 0.6); box-shadow: inset 0 0 20px rgba(139, 92, 246, 0.05), 0 0 30px rgba(139, 92, 246, 0.2); transform: translateY(-4px); }
+        .bg-grid-pattern { background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%231E293B' fill-opacity='0.4' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E"); }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #030712; }
+        ::-webkit-scrollbar-thumb { background: #1E293B; border-radius: 4px; }
+        .nav-glass { background: rgba(3, 7, 18, 0.85); backdrop-filter: blur(20px); }
+
+        /* ===== LIGHT THEME ===== */
+        body.theme-light { background-color: #F8FAFC; color: #1E293B; }
+        body.theme-light .bg-grid-pattern { background-image: none !important; }
+        body.theme-light .text-gradient { background: linear-gradient(135deg, #0284C7 0%, #2563EB 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        body.theme-light .text-gradient-accent { background: linear-gradient(135deg, #7C3AED 0%, #0284C7 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        body.theme-light .text-gradient-red { background: linear-gradient(135deg, #DC2626 0%, #EA580C 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        body.theme-light .nav-glass { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px); border-color: #E2E8F0; }
+        body.theme-light .bg-gradient-glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(16px); }
+        body.theme-light .border-glow { border-color: rgba(0, 0, 0, 0.08); box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04); }
+        body.theme-light .border-glow:hover { border-color: rgba(37, 99, 235, 0.3); box-shadow: 0 4px 20px rgba(37, 99, 235, 0.1); }
+        body.theme-light .border-glow-blue { border-color: rgba(0, 0, 0, 0.08); box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+        body.theme-light .border-glow-blue:hover { border-color: rgba(37, 99, 235, 0.3); box-shadow: 0 4px 20px rgba(37, 99, 235, 0.1); }
+        body.theme-light .border-glow-accent { border-color: rgba(0, 0, 0, 0.08); box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+        body.theme-light .border-glow-accent:hover { border-color: rgba(124, 58, 237, 0.3); box-shadow: 0 4px 20px rgba(124, 58, 237, 0.1); }
+        body.theme-light .border-glow-warning { border-color: rgba(0, 0, 0, 0.08); box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+        body.theme-light .border-glow-warning:hover { border-color: rgba(217, 119, 6, 0.3); box-shadow: 0 4px 20px rgba(217, 119, 6, 0.1); }
+        body.theme-light .border-glow-success { border-color: rgba(0, 0, 0, 0.08); box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+        body.theme-light .border-glow-success:hover { border-color: rgba(5, 150, 105, 0.3); box-shadow: 0 4px 20px rgba(5, 150, 105, 0.1); }
+        body.theme-light .border-glow-cyan { border-color: rgba(0, 0, 0, 0.08); box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+        body.theme-light .border-glow-cyan:hover { border-color: rgba(6, 182, 212, 0.3); box-shadow: 0 4px 20px rgba(6, 182, 212, 0.1); }
+        body.theme-light .border-glow-red { border-color: rgba(0, 0, 0, 0.08); box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+        body.theme-light .border-glow-red:hover { border-color: rgba(220, 38, 38, 0.3); box-shadow: 0 4px 20px rgba(220, 38, 38, 0.1); }
+        body.theme-light .text-white { color: #0F172A; }
+        body.theme-light .text-slate-300 { color: #475569; }
+        body.theme-light .text-slate-400 { color: #64748B; }
+        body.theme-light .text-slate-500 { color: #94A3B8; }
+        body.theme-light .text-slate-600 { color: #CBD5E1; }
+        body.theme-light .bg-brand-card, body.theme-light .bg-brand-card\/60, body.theme-light .bg-brand-card\/80, body.theme-light .bg-brand-card\/40 { background-color: #FFFFFF; }
+        body.theme-light .bg-brand-surface, body.theme-light .bg-brand-surface\/60, body.theme-light .bg-brand-surface\/30 { background-color: #F1F5F9; }
+        body.theme-light .bg-brand-dark { background-color: #F8FAFC; }
+        body.theme-light .bg-\[\#070D18\] { background-color: #F1F5F9; }
+        body.theme-light .bg-\[\#040914\] { background-color: #FFFFFF; }
+        body.theme-light .bg-\[\#0B1221\] { background-color: #F8FAFC; }
+        body.theme-light .border-slate-800, body.theme-light .border-slate-800\/60 { border-color: #E2E8F0; }
+        body.theme-light .border-slate-700, body.theme-light .border-slate-700\/50, body.theme-light .border-slate-700\/40, body.theme-light .border-slate-700\/30 { border-color: #E2E8F0; }
+        body.theme-light .divide-slate-700\/30 > :not([hidden]) ~ :not([hidden]) { border-color: #E2E8F0; }
+        body.theme-light .hover\:text-white:hover { color: #1E40AF; }
+        body.theme-light .hover\:bg-slate-800:hover { background-color: #F1F5F9; }
+        body.theme-light .hover\:bg-brand-surface\/30:hover { background-color: #F8FAFC; }
+        body.theme-light footer { background-color: #F8FAFC; border-color: #E2E8F0; }
+        body.theme-light footer .text-white { color: #0F172A; }
+        body.theme-light ::-webkit-scrollbar-track { background: #F8FAFC; }
+        body.theme-light ::-webkit-scrollbar-thumb { background: #CBD5E1; }
+        body.theme-light code { background-color: #F1F5F9; color: #1E293B; }
+
+        body.theme-light .border-slate-700\/40 { border-color: #E2E8F0; }
+        body.theme-light a.text-slate-400 { color: #64748B; }
+        body.theme-light a.text-slate-400:hover { color: #1E40AF; background-color: #F1F5F9; }
+    </style>
+</head>
+<body class="antialiased bg-grid-pattern min-h-screen">
+
+    <!-- ==================== TOP NAVIGATION ==================== -->
+    <nav class="nav-glass sticky top-0 z-50 border-b border-slate-800/60">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center h-14 gap-1 overflow-x-auto">
+                <a href="index.html" class="text-lg font-extrabold tracking-tight mr-4 whitespace-nowrap shrink-0">
+                    <span class="text-gradient">IT</span><span class="text-white">Hub</span>
+                </a>
+                <a href="index.html" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors whitespace-nowrap">首頁</a>
+                <a href="platform.html" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors whitespace-nowrap">平臺架構</a>
+                <a href="gemmb.html" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors whitespace-nowrap">GEMMB 監控</a>
+                <a href="cmdb.html" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors whitespace-nowrap">CMDB 配置</a>
+                <a href="itsm.html" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-brand-accent/20 text-brand-accent whitespace-nowrap">ITSM 服務</a>
+                <a href="automation.html" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors whitespace-nowrap">自動化 / AI</a>
+                <a href="integration.html" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors whitespace-nowrap">集成框架</a>
+                <a href="noc.html" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors whitespace-nowrap">統一運營服務</a>
+                <div class="ml-auto shrink-0 flex items-center gap-1 border-l border-slate-700/40 pl-3">
+                    <a href="../itsm.html" class="px-2 py-1 rounded text-[10px] font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition-colors whitespace-nowrap">简</a>
+                    <a href="itsm.html" class="px-2 py-1 rounded text-[10px] font-semibold bg-brand-primary/20 text-brand-primary font-bold transition-colors whitespace-nowrap">繁</a>
+                    <a href="../EN/itsm.html" class="px-2 py-1 rounded text-[10px] font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition-colors whitespace-nowrap">EN</a>
+                </div>
+                <button onclick="toggleTheme()" class="ml-auto shrink-0 w-8 h-8 rounded-lg flex items-center justify-center border border-slate-700/40 hover:border-brand-primary/40 transition-colors" title="切換主題" id="theme-toggle">
+                    <svg id="icon-moon" class="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                    <svg id="icon-sun" class="w-4 h-4 text-yellow-500 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ==================== HERO ==================== -->
+    <header class="relative pt-20 pb-16 overflow-hidden">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[1200px] h-[600px] opacity-15 pointer-events-none">
+            <div class="absolute inset-0 bg-gradient-to-br from-brand-accent via-purple-600 to-brand-primary blur-[150px] rounded-full mix-blend-screen"></div>
+        </div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="inline-flex items-center space-x-3 bg-brand-surface border border-slate-700/60 rounded-full px-5 py-2 mb-6 shadow-lg">
+                <span class="relative flex h-2.5 w-2.5">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-accent opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-brand-accent"></span>
+                </span>
+                <span class="text-[10px] md:text-xs font-bold tracking-[0.2em] text-slate-300 uppercase whitespace-nowrap">ITIL-Based Service Management</span>
+            </div>
+
+            <h1 class="text-4xl md:text-6xl lg:text-7xl font-black tracking-tight mb-6 leading-[1.1]">
+                ITSM — IT 服務<br><span class="text-gradient-accent">管理中心</span>
+            </h1>
+            <p class="text-lg md:text-xl text-slate-400 mb-12 leading-relaxed max-w-4xl mx-auto">
+                企業級工單、變更、事件管理。原生適配 <strong class="text-white">Hand 漢得</strong>與 <strong class="text-white">ServiceNow</strong>，支持與任何 ITSM 系統雙向對接，實現工單全生命週期自動化流轉。
+            </p>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+                <div class="bg-gradient-glass border-glow-accent rounded-2xl p-5 text-center">
+                    <div class="text-3xl md:text-4xl font-black text-brand-accent">4</div>
+                    <div class="text-[10px] text-slate-500 uppercase tracking-wider font-bold mt-1">大 ITIL 流程</div>
+                </div>
+                <div class="bg-gradient-glass border-glow-accent rounded-2xl p-5 text-center">
+                    <div class="text-3xl md:text-4xl font-black text-brand-primary">100K+</div>
+                    <div class="text-[10px] text-slate-500 uppercase tracking-wider font-bold mt-1">工單容量驗證</div>
+                </div>
+                <div class="bg-gradient-glass border-glow-accent rounded-2xl p-5 text-center">
+                    <div class="text-3xl md:text-4xl font-black text-brand-success">&lt;200ms</div>
+                    <div class="text-[10px] text-slate-500 uppercase tracking-wider font-bold mt-1">P95 查詢響應</div>
+                </div>
+                <div class="bg-gradient-glass border-glow-accent rounded-2xl p-5 text-center">
+                    <div class="text-3xl md:text-4xl font-black text-brand-warning">P1-P4</div>
+                    <div class="text-[10px] text-slate-500 uppercase tracking-wider font-bold mt-1">SLA 等級管控</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== BREADCRUMB ==================== -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div class="flex items-center gap-2 text-xs text-slate-500">
+            <a href="index.html" class="hover:text-brand-accent transition-colors">首頁</a>
+            <span>/</span>
+            <span class="text-brand-accent font-semibold">ITSM 服務管理</span>
+        </div>
+    </div>
+
+    <!-- ==================== ITIL PROCESSES ==================== -->
+    <section class="py-24 border-t border-slate-800 bg-[#070D18] relative overflow-hidden">
+        <div class="absolute left-0 top-1/4 w-[500px] h-[500px] bg-brand-accent/5 rounded-full blur-[120px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16">
+                <div class="inline-flex items-center space-x-2 bg-brand-surface px-4 py-2 rounded-lg mb-4 border border-slate-700 shadow-md">
+                    <span class="text-brand-accent font-bold tracking-widest text-xs uppercase">ITIL 標準流程</span>
+                </div>
+                <h2 class="text-3xl md:text-5xl font-black mb-6 tracking-tight">四大 ITIL <span class="text-gradient-accent">核心流程</span></h2>
+                <p class="text-lg text-slate-400 max-w-4xl mx-auto">ITSM 模塊遵循 ITIL 最佳實踐設計，覆蓋企業 IT 服務管理的核心流程需求。</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Incident -->
+                <div class="bg-gradient-glass border-glow-accent rounded-2xl p-8">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-lg bg-red-500/20 flex items-center justify-center border border-red-500/40">
+                            <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                        </div>
+                        <h3 class="text-lg font-extrabold text-white">事件管理 (Incident)</h3>
+                    </div>
+                    <p class="text-sm text-slate-400 mb-4">快速恢復服務，最小化業務中斷影響。</p>
+                    <ul class="space-y-2 text-xs text-slate-400">
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-red-400 rounded-full mt-1 mr-2 shrink-0"></span>自動/手動創建工單，告警直接關聯</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-red-400 rounded-full mt-1 mr-2 shrink-0"></span>P1-P4 優先級分級，SLA 計時器自動啓動</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-red-400 rounded-full mt-1 mr-2 shrink-0"></span>拓撲根因分析：多臺設備故障合併爲一張工單</li>
+                    </ul>
+                </div>
+
+                <!-- Problem -->
+                <div class="bg-gradient-glass border-glow-accent rounded-2xl p-8">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-lg bg-brand-warning/20 flex items-center justify-center border border-brand-warning/40">
+                            <svg class="w-5 h-5 text-brand-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <h3 class="text-lg font-extrabold text-white">問題管理 (Problem)</h3>
+                    </div>
+                    <p class="text-sm text-slate-400 mb-4">深度分析反覆出現的事件，找到並消除根本原因。</p>
+                    <ul class="space-y-2 text-xs text-slate-400">
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-warning rounded-full mt-1 mr-2 shrink-0"></span>事件關聯分析，識別反覆出現的故障模式</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-warning rounded-full mt-1 mr-2 shrink-0"></span>根因分析與解決方案追蹤</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-warning rounded-full mt-1 mr-2 shrink-0"></span>知識庫沉澱，防止同類問題再次發生</li>
+                    </ul>
+                </div>
+
+                <!-- Change -->
+                <div class="bg-gradient-glass border-glow-accent rounded-2xl p-8">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-lg bg-brand-secondary/20 flex items-center justify-center border border-brand-secondary/40">
+                            <svg class="w-5 h-5 text-brand-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                        </div>
+                        <h3 class="text-lg font-extrabold text-white">變更管理 (Change)</h3>
+                    </div>
+                    <p class="text-sm text-slate-400 mb-4">標準化變更流程，降低變更風險，確保所有變更有跡可循。</p>
+                    <ul class="space-y-2 text-xs text-slate-400">
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-secondary rounded-full mt-1 mr-2 shrink-0"></span>變更請求審批流程，CI 變更自動觸發 CR</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-secondary rounded-full mt-1 mr-2 shrink-0"></span>變更影響評估，基於 CMDB 拓撲分析</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-secondary rounded-full mt-1 mr-2 shrink-0"></span>變更實施追蹤與回滾計劃</li>
+                    </ul>
+                </div>
+
+                <!-- Service Request -->
+                <div class="bg-gradient-glass border-glow-accent rounded-2xl p-8">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-lg bg-brand-success/20 flex items-center justify-center border border-brand-success/40">
+                            <svg class="w-5 h-5 text-brand-success" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"></path></svg>
+                        </div>
+                        <h3 class="text-lg font-extrabold text-white">服務請求 (Service Request)</h3>
+                    </div>
+                    <p class="text-sm text-slate-400 mb-4">標準化處理用戶日常服務請求，提升服務效率。</p>
+                    <ul class="space-y-2 text-xs text-slate-400">
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-success rounded-full mt-1 mr-2 shrink-0"></span>自助服務門戶，用戶自主提交請求</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-success rounded-full mt-1 mr-2 shrink-0"></span>預定義服務目錄和請求模板</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-success rounded-full mt-1 mr-2 shrink-0"></span>請求進度實時查看，服務質量評價</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== AUTO-TICKETING + ALERT DASHBOARD ==================== -->
+    <section class="py-24 border-t border-slate-800 bg-[#040914] relative overflow-hidden">
+        <div class="absolute right-0 top-1/3 w-[500px] h-[500px] bg-brand-secondary/5 rounded-full blur-[120px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16">
+                <div class="inline-flex items-center space-x-2 bg-brand-surface px-4 py-2 rounded-lg mb-4 border border-slate-700 shadow-md">
+                    <span class="text-brand-secondary font-bold tracking-widest text-xs uppercase">智能告警</span>
+                </div>
+                <h2 class="text-3xl md:text-5xl font-black mb-6 tracking-tight">智能工單與<span class="text-gradient">告警儀表盤</span></h2>
+                <p class="text-lg text-slate-400 max-w-4xl mx-auto">從告警到工單的全自動化閉環，三種工單模式滿足不同運營需求。</p>
+            </div>
+
+            <!-- Auto-Ticketing 3 Modes -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                <div class="bg-gradient-glass border border-brand-success/15 rounded-2xl p-6 hover:border-brand-success/40 transition-all duration-300" style="box-shadow: 0 0 15px rgba(16,185,129,0.05);">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-10 h-10 rounded-lg bg-brand-success/20 flex items-center justify-center border border-brand-success/40">
+                            <svg class="w-5 h-5 text-brand-success" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        </div>
+                        <span class="px-2.5 py-1 bg-brand-success/10 border border-brand-success/20 rounded-lg text-[10px] font-bold text-brand-success uppercase">推薦</span>
+                    </div>
+                    <h4 class="text-sm font-extrabold text-white mb-2">全自動模式</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed mb-3">基於 Poller 邏輯自動創建和分配工單。</p>
+                    <ul class="space-y-2 text-xs text-slate-400">
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-success rounded-full mt-1 mr-2 shrink-0"></span>自動創建工單並分配</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-success rounded-full mt-1 mr-2 shrink-0"></span>利用網絡拓撲根因分析</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-success rounded-full mt-1 mr-2 shrink-0"></span>多設備故障自動關聯合並</li>
+                    </ul>
+                </div>
+
+                <div class="bg-gradient-glass border-glow rounded-2xl p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 rounded-lg bg-brand-secondary/20 flex items-center justify-center border border-brand-secondary/40">
+                            <svg class="w-5 h-5 text-brand-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                    </div>
+                    <h4 class="text-sm font-extrabold text-white mb-2">半自動模式</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed mb-3">控制分配到已有工單，限制新建工單數量。</p>
+                    <ul class="space-y-2 text-xs text-slate-400">
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-secondary rounded-full mt-1 mr-2 shrink-0"></span>告警自動關聯已有工單</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-secondary rounded-full mt-1 mr-2 shrink-0"></span>限制重複創建</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-secondary rounded-full mt-1 mr-2 shrink-0"></span>人工確認後升級處理</li>
+                    </ul>
+                </div>
+
+                <div class="bg-gradient-glass border-glow rounded-2xl p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 rounded-lg bg-brand-warning/20 flex items-center justify-center border border-brand-warning/40">
+                            <svg class="w-5 h-5 text-brand-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                        </div>
+                    </div>
+                    <h4 class="text-sm font-extrabold text-white mb-2">手動模式</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed mb-3">僅生成告警，用戶確認後才創建工單。</p>
+                    <ul class="space-y-2 text-xs text-slate-400">
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-warning rounded-full mt-1 mr-2 shrink-0"></span>告警推送但不自動創建工單</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-warning rounded-full mt-1 mr-2 shrink-0"></span>人工評估後決定是否開單</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-warning rounded-full mt-1 mr-2 shrink-0"></span>適用於非關鍵業務場景</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Alert Dashboard -->
+            <div class="bg-gradient-glass border-glow rounded-2xl p-8">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 rounded-lg bg-red-500/20 flex items-center justify-center border border-red-500/40">
+                        <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-extrabold text-white">告警儀表盤</h3>
+                        <p class="text-xs text-slate-400">跨客戶告警可視化，團隊協作透明高效</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4 text-center">
+                        <h5 class="text-sm font-bold text-white mb-1">告警確認</h5>
+                        <p class="text-xs text-slate-400">團隊成員認領告警，狀態透明可見</p>
+                    </div>
+                    <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4 text-center">
+                        <h5 class="text-sm font-bold text-white mb-1">創建工單</h5>
+                        <p class="text-xs text-slate-400">直接從告警創建工單或關聯已有工單</p>
+                    </div>
+                    <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4 text-center">
+                        <h5 class="text-sm font-bold text-white mb-1">跨客戶視圖</h5>
+                        <p class="text-xs text-slate-400">多租戶統一告警看板，MSP 全局掌控</p>
+                    </div>
+                    <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4 text-center">
+                        <h5 class="text-sm font-bold text-white mb-1">告警分級</h5>
+                        <p class="text-xs text-slate-400">Warning / Minor / Major / Critical 四級</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SLA MANAGEMENT ==================== -->
+    <section class="py-24 border-t border-slate-800 bg-[#070D18] relative overflow-hidden">
+        <div class="absolute right-0 top-1/4 w-[500px] h-[500px] bg-brand-warning/5 rounded-full blur-[120px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16">
+                <div class="inline-flex items-center space-x-2 bg-brand-surface px-4 py-2 rounded-lg mb-4 border border-slate-700 shadow-md">
+                    <span class="text-brand-warning font-bold tracking-widest text-xs uppercase">SLA 管控</span>
+                </div>
+                <h2 class="text-3xl md:text-5xl font-black mb-6 tracking-tight">SLA 服務等級<span class="text-gradient-accent">管理</span></h2>
+                <p class="text-lg text-slate-400 max-w-4xl mx-auto">基於工單優先級的 SLA 計時器，支持時區感知與自定義覆蓋時段，確保服務承諾精準達成。</p>
+            </div>
+
+            <!-- SLA Matrix -->
+            <div class="bg-gradient-glass border border-slate-700/40 rounded-2xl overflow-hidden shadow-xl mb-8">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="bg-brand-surface/80 border-b border-slate-700/60">
+                                <th class="px-6 py-4 text-left text-xs font-bold text-brand-accent uppercase tracking-wider">優先級</th>
+                                <th class="px-6 py-4 text-left text-xs font-bold text-brand-accent uppercase tracking-wider">說明</th>
+                                <th class="px-6 py-4 text-left text-xs font-bold text-brand-accent uppercase tracking-wider">響應時間</th>
+                                <th class="px-6 py-4 text-left text-xs font-bold text-brand-accent uppercase tracking-wider">緊急度</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-700/30">
+                            <tr class="hover:bg-red-500/5 transition-colors">
+                                <td class="px-6 py-4"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-red-500/20 border border-red-500/30 rounded-lg text-xs font-black text-red-400">P1</span></td>
+                                <td class="px-6 py-4 text-slate-300">最嚴重問題，對業務運營產生負面影響且無法通過可接受方式恢復</td>
+                                <td class="px-6 py-4"><span class="text-lg font-black text-red-400">10 min</span></td>
+                                <td class="px-6 py-4"><span class="text-xs text-red-400 font-bold">緊急</span></td>
+                            </tr>
+                            <tr class="hover:bg-brand-warning/5 transition-colors">
+                                <td class="px-6 py-4"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-brand-warning/20 border border-brand-warning/30 rounded-lg text-xs font-black text-brand-warning">P2</span></td>
+                                <td class="px-6 py-4 text-slate-300">次嚴重問題，對業務有較大影響但網絡仍可運行</td>
+                                <td class="px-6 py-4"><span class="text-lg font-black text-brand-warning">20 min</span></td>
+                                <td class="px-6 py-4"><span class="text-xs text-brand-warning font-bold">高</span></td>
+                            </tr>
+                            <tr class="hover:bg-brand-secondary/5 transition-colors">
+                                <td class="px-6 py-4"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-brand-secondary/20 border border-brand-secondary/30 rounded-lg text-xs font-black text-brand-secondary">P3</span></td>
+                                <td class="px-6 py-4 text-slate-300">一般問題，網絡功能降低但對業務影響較小</td>
+                                <td class="px-6 py-4"><span class="text-lg font-black text-brand-secondary">30 min</span></td>
+                                <td class="px-6 py-4"><span class="text-xs text-brand-secondary font-bold">中</span></td>
+                            </tr>
+                            <tr class="hover:bg-brand-success/5 transition-colors">
+                                <td class="px-6 py-4"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-brand-success/20 border border-brand-success/30 rounded-lg text-xs font-black text-brand-success">P4</span></td>
+                                <td class="px-6 py-4 text-slate-300">服務請求或計劃性工作</td>
+                                <td class="px-6 py-4"><span class="text-lg font-black text-brand-success">30 min</span></td>
+                                <td class="px-6 py-4"><span class="text-xs text-brand-success font-bold">低</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- SLA Features -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-brand-card/40 border border-slate-700/30 rounded-xl p-5">
+                    <h5 class="text-sm font-bold text-white mb-2">響應與解決分離</h5>
+                    <p class="text-xs text-slate-400">響應計時器和解決計時器分別配置，精確追蹤服務各環節效率。</p>
+                </div>
+                <div class="bg-brand-card/40 border border-slate-700/30 rounded-xl p-5">
+                    <h5 class="text-sm font-bold text-white mb-2">時區感知</h5>
+                    <p class="text-xs text-slate-400">自動匹配工作時區，自定義工作時間/非工作時間覆蓋時段。</p>
+                </div>
+                <div class="bg-brand-card/40 border border-slate-700/30 rounded-xl p-5">
+                    <h5 class="text-sm font-bold text-white mb-2">SLA 超時預警</h5>
+                    <p class="text-xs text-slate-400">SLA 即將超時自動升級告警等級，確保關鍵問題及時處理。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== NOTIFICATION ENGINE + TICKET WORKFLOW ==================== -->
+    <section class="py-24 border-t border-slate-800 bg-[#040914] relative overflow-hidden">
+        <div class="absolute left-0 top-1/3 w-[500px] h-[500px] bg-cyan-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Notification Engine -->
+                <div class="bg-gradient-glass border-glow rounded-2xl p-8">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 rounded-lg bg-cyan-500/20 flex items-center justify-center border border-cyan-500/40">
+                            <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                        </div>
+                        <h3 class="text-lg font-extrabold text-white">通知引擎</h3>
+                    </div>
+                    <p class="text-sm text-slate-400 mb-4">高度可定製的郵件/短信通知模板，HTML 編輯器支持，事件驅動精準推送。</p>
+                    <ul class="space-y-3 text-xs text-slate-400">
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-cyan-400 rounded-full mt-1 mr-2 shrink-0"></span><strong class="text-white">多語言、多時區感知</strong> — 自動匹配收件人時區和語言</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-cyan-400 rounded-full mt-1 mr-2 shrink-0"></span><strong class="text-white">事件驅動觸發</strong> — 工單創建/更新/日誌創建/SLA 超時</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-cyan-400 rounded-full mt-1 mr-2 shrink-0"></span><strong class="text-white">HTML 模板編輯器</strong> — 自定義郵件和短信通知格式</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-cyan-400 rounded-full mt-1 mr-2 shrink-0"></span><strong class="text-white">第三方集成</strong> — HTTP 調用外部系統，自定義請求頭和認證</li>
+                    </ul>
+                </div>
+
+                <!-- Ticket Template & Workflow -->
+                <div class="bg-gradient-glass border-glow rounded-2xl p-8">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 rounded-lg bg-brand-accent/20 flex items-center justify-center border border-brand-accent/40">
+                            <svg class="w-5 h-5 text-brand-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        </div>
+                        <h3 class="text-lg font-extrabold text-white">工單模板與流程</h3>
+                    </div>
+                    <p class="text-sm text-slate-400 mb-4">預定義工單模板，支持 HTML 編輯器自定義輸入表單，完整的工單生命週期管理。</p>
+                    <ul class="space-y-3 text-xs text-slate-400">
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-accent rounded-full mt-1 mr-2 shrink-0"></span><strong class="text-white">工單日誌 (Journals)</strong> — 私密日誌、文件上傳、草稿</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-accent rounded-full mt-1 mr-2 shrink-0"></span><strong class="text-white">聯繫人分配</strong> — 自動/手動，區分主要/次要 (Email/CC)</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-accent rounded-full mt-1 mr-2 shrink-0"></span><strong class="text-white">關聯工單</strong> — 優化告警路由，避免重複處理</li>
+                        <li class="flex items-start"><span class="w-1.5 h-1.5 bg-brand-accent rounded-full mt-1 mr-2 shrink-0"></span><strong class="text-white">自動關閉緩衝期</strong> — 解決後允許客戶在最終關閉前介入</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Load Balancing -->
+            <div class="mt-8 bg-gradient-glass border-glow rounded-2xl p-8">
+                <div class="flex items-center gap-3 mb-5">
+                    <div class="w-10 h-10 rounded-lg bg-brand-success/20 flex items-center justify-center border border-brand-success/40">
+                        <svg class="w-5 h-5 text-brand-success" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"></path></svg>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-extrabold text-white">動態工單負載均衡</h3>
+                        <p class="text-xs text-slate-400">Sign-In Perception 算法驅動的智能工單分配</p>
+                    </div>
+                </div>
+                <p class="text-sm text-slate-400 mb-4">持續監測所有在線工程師的實時工作負載，新工單智能分配給當前負載最低的工程師，確保高可用和零瓶頸。</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4 text-center">
+                        <div class="text-2xl font-black text-brand-success">Real-time</div>
+                        <div class="text-[10px] text-slate-500 font-bold uppercase mt-1">負載實時監測</div>
+                    </div>
+                    <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4 text-center">
+                        <div class="text-2xl font-black text-brand-secondary">Auto</div>
+                        <div class="text-[10px] text-slate-500 font-bold uppercase mt-1">智能最低負載分配</div>
+                    </div>
+                    <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4 text-center">
+                        <div class="text-2xl font-black text-brand-warning">Zero</div>
+                        <div class="text-[10px] text-slate-500 font-bold uppercase mt-1">人工瓶頸</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== PERFORMANCE + CMDB INTEGRATION ==================== -->
+    <section class="py-24 border-t border-slate-800 bg-[#070D18] relative overflow-hidden">
+        <div class="absolute right-0 bottom-0 w-[500px] h-[500px] bg-brand-accent/5 rounded-full blur-[120px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <!-- Performance Metrics -->
+            <div class="mb-16">
+                <div class="text-center mb-12">
+                    <div class="inline-flex items-center space-x-2 bg-brand-surface px-4 py-2 rounded-lg mb-4 border border-slate-700 shadow-md">
+                        <span class="text-brand-success font-bold tracking-widest text-xs uppercase">性能驗證</span>
+                    </div>
+                    <h2 class="text-3xl md:text-5xl font-black mb-6 tracking-tight">性能與<span class="text-gradient">可靠性</span></h2>
+                    <p class="text-lg text-slate-400 max-w-4xl mx-auto">經過嚴格的生產級壓力測試驗證，覆蓋 10 萬至 100 萬+工單數據量級。</p>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="bg-gradient-glass border-glow rounded-2xl p-6 text-center">
+                        <div class="text-3xl md:text-4xl font-black text-brand-accent">100K+</div>
+                        <div class="text-[10px] text-slate-500 uppercase tracking-wider font-bold mt-1">工單容量驗證</div>
+                    </div>
+                    <div class="bg-gradient-glass border-glow rounded-2xl p-6 text-center">
+                        <div class="text-3xl md:text-4xl font-black text-brand-secondary">&lt;200ms</div>
+                        <div class="text-[10px] text-slate-500 uppercase tracking-wider font-bold mt-1">P95 查詢響應</div>
+                    </div>
+                    <div class="bg-gradient-glass border-glow rounded-2xl p-6 text-center">
+                        <div class="text-3xl md:text-4xl font-black text-brand-success">&lt;500ms</div>
+                        <div class="text-[10px] text-slate-500 uppercase tracking-wider font-bold mt-1">P99 查詢響應</div>
+                    </div>
+                    <div class="bg-gradient-glass border-glow rounded-2xl p-6 text-center">
+                        <div class="text-3xl md:text-4xl font-black text-brand-warning">99.99%</div>
+                        <div class="text-[10px] text-slate-500 uppercase tracking-wider font-bold mt-1">系統可用性</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CMDB Integration -->
+            <div class="bg-gradient-glass border-glow-accent rounded-2xl p-8">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 rounded-lg bg-brand-warning/20 flex items-center justify-center border border-brand-warning/40">
+                        <svg class="w-5 h-5 text-brand-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"></path></svg>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-extrabold text-white">與 CMDB 深度聯動</h3>
+                        <p class="text-xs text-slate-400">ITSM 與 CMDB 的雙向集成是 ITHub 的核心差異化優勢</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4">
+                        <h5 class="text-sm font-bold text-white mb-2">工單自動關聯 CI</h5>
+                        <p class="text-xs text-slate-400">創建工單時自動關聯受影響的配置項（CI），快速定位影響範圍。</p>
+                    </div>
+                    <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4">
+                        <h5 class="text-sm font-bold text-white mb-2">變更管理集成</h5>
+                        <p class="text-xs text-slate-400">CI 變更自動觸發變更請求（CR），確保配置管理與變更流程同步。</p>
+                    </div>
+                    <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4">
+                        <h5 class="text-sm font-bold text-white mb-2">影響分析</h5>
+                        <p class="text-xs text-slate-400">基於 CMDB 關係拓撲，自動分析 CI 故障的上下游影響鏈。</p>
+                    </div>
+                    <div class="bg-brand-card/60 border border-slate-700/30 rounded-xl p-4">
+                        <h5 class="text-sm font-bold text-white mb-2">資產雙向同步</h5>
+                        <p class="text-xs text-slate-400">CMDB 中的 CI 資產數據與 ITSM 中的資產記錄雙向實時同步。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== ECOSYSTEM INTEGRATION ==================== -->
+    <section class="py-24 border-t border-slate-800 bg-[#040914] relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16">
+                <div class="inline-flex items-center space-x-2 bg-brand-surface px-4 py-2 rounded-lg mb-4 border border-slate-700 shadow-md">
+                    <span class="text-cyan-400 font-bold tracking-widest text-xs uppercase">開放生態</span>
+                </div>
+                <h2 class="text-3xl md:text-5xl font-black mb-6 tracking-tight">開放式生態<span class="text-gradient-accent">對接</span></h2>
+                <p class="text-lg text-slate-400 max-w-4xl mx-auto">ITSM 模塊絕非孤立系統。ITHub 提供高開放性、基於 API 標準的雙向對接能力，使技術底層與 IT 業務流程完美融合。</p>
+            </div>
+
+            <div class="bg-gradient-glass border border-slate-700/40 rounded-2xl overflow-hidden shadow-xl mb-8">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="bg-brand-surface/80 border-b border-slate-700/60">
+                                <th class="px-6 py-4 text-left text-xs font-bold text-brand-accent uppercase tracking-wider">ITSM 平臺</th>
+                                <th class="px-6 py-4 text-left text-xs font-bold text-brand-accent uppercase tracking-wider">集成方式</th>
+                                <th class="px-6 py-4 text-left text-xs font-bold text-brand-accent uppercase tracking-wider">說明</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-700/30">
+                            <tr class="hover:bg-brand-surface/30 transition-colors">
+                                <td class="px-6 py-3.5 font-semibold text-white">Hand 漢得</td>
+                                <td class="px-6 py-3.5"><span class="px-2 py-0.5 bg-brand-success/10 border border-brand-success/20 rounded text-[10px] font-bold text-brand-success">原生集成</span></td>
+                                <td class="px-6 py-3.5 text-slate-400">深度適配，支持字段級雙向同步和自定義映射</td>
+                            </tr>
+                            <tr class="hover:bg-brand-surface/30 transition-colors">
+                                <td class="px-6 py-3.5 font-semibold text-white">ServiceNow</td>
+                                <td class="px-6 py-3.5"><span class="px-2 py-0.5 bg-brand-success/10 border border-brand-success/20 rounded text-[10px] font-bold text-brand-success">原生集成</span></td>
+                                <td class="px-6 py-3.5 text-slate-400">完整生命週期對接，支持工單狀態實時同步</td>
+                            </tr>
+                            <tr class="hover:bg-brand-surface/30 transition-colors">
+                                <td class="px-6 py-3.5 font-semibold text-white">Jira Service Management</td>
+                                <td class="px-6 py-3.5"><span class="px-2 py-0.5 bg-brand-secondary/10 border border-brand-secondary/20 rounded text-[10px] font-bold text-brand-secondary">API 集成</span></td>
+                                <td class="px-6 py-3.5 text-slate-400">通過 REST API 雙向對接，自定義字段映射</td>
+                            </tr>
+                            <tr class="hover:bg-brand-surface/30 transition-colors">
+                                <td class="px-6 py-3.5 font-semibold text-white">BMC Remedy</td>
+                                <td class="px-6 py-3.5"><span class="px-2 py-0.5 bg-brand-secondary/10 border border-brand-secondary/20 rounded text-[10px] font-bold text-brand-secondary">API 集成</span></td>
+                                <td class="px-6 py-3.5 text-slate-400">企業級 ITSM 系統對接</td>
+                            </tr>
+                            <tr class="hover:bg-brand-surface/30 transition-colors">
+                                <td class="px-6 py-3.5 font-semibold text-white">自研系統</td>
+                                <td class="px-6 py-3.5"><span class="px-2 py-0.5 bg-brand-accent/10 border border-brand-accent/20 rounded text-[10px] font-bold text-brand-accent">開放 API</span></td>
+                                <td class="px-6 py-3.5 text-slate-400">2,100+ REST APIs 支持任意系統敏捷對接</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-r from-brand-accent/10 to-brand-secondary/10 border border-brand-accent/20 rounded-2xl p-6 md:p-8">
+                <p class="text-sm text-slate-300 leading-relaxed">
+                    <strong class="text-white">雙向同步能力：</strong>ITHub 不僅支持將告警自動創建工單到外部 ITSM 系統，還能將外部工單的狀態變更（受理、掛起、關閉）實時回傳至 ITHub，實現真正的端到端閉環管理。支持 SOAP、REST API 和 Webhook 多種集成方式。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="py-16 text-center bg-brand-dark border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-lg font-extrabold text-white mb-4"><span class="text-gradient">IT</span>Hub 平臺</div>
+            <p class="text-sm text-slate-500 mb-6">Logicalis 網贏 — 全球 ICT 解決方案與管理服務提供商 · Architects of Change</p>
+            <div class="flex flex-wrap justify-center gap-4 mb-8">
+                <a href="platform.html" class="text-xs text-slate-400 hover:text-slate-300 transition-colors">平臺架構</a>
+                <a href="gemmb.html" class="text-xs text-slate-400 hover:text-brand-secondary transition-colors">GEMMB 監控</a>
+                <a href="cmdb.html" class="text-xs text-slate-400 hover:text-brand-warning transition-colors">CMDB 配置</a>
+                <a href="itsm.html" class="text-xs text-slate-400 hover:text-brand-accent transition-colors">ITSM 服務</a>
+                <a href="automation.html" class="text-xs text-slate-400 hover:text-brand-success transition-colors">自動化 / AI</a>
+                <a href="integration.html" class="text-xs text-slate-400 hover:text-cyan-400 transition-colors">集成框架</a>
+                <a href="noc.html" class="text-xs text-slate-400 hover:text-red-400 transition-colors">統一運營服務</a>
+            </div>
+            <p class="text-[10px] font-bold text-slate-600 uppercase tracking-widest">&copy; 2026 Logicalis 中國 · 保留所有權利</p>
+        </div>
+    </footer>
+
+
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            const isLight = body.classList.toggle('theme-light');
+            body.classList.toggle('bg-grid-pattern', !isLight);
+            localStorage.setItem('ithub-theme', isLight ? 'light' : 'dark');
+            document.getElementById('icon-moon').classList.toggle('hidden', isLight);
+            document.getElementById('icon-sun').classList.toggle('hidden', !isLight);
+        }
+        (function() {
+            if (localStorage.getItem('ithub-theme') === 'light') {
+                document.body.classList.add('theme-light');
+                document.body.classList.remove('bg-grid-pattern');
+                var moon = document.getElementById('icon-moon');
+                var sun = document.getElementById('icon-sun');
+                if (moon && sun) { moon.classList.add('hidden'); sun.classList.remove('hidden'); }
+            }
+        })();
+    </script>
+</body>
+</html>

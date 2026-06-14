@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>集成框架 | ITHub — Logicalis 网赢</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            dark: '#030712',
+                            card: '#0F172A',
+                            surface: '#1E293B',
+                            primary: '#00F0FF',
+                            secondary: '#3B82F6',
+                            accent: '#8B5CF6',
+                            success: '#10B981',
+                            warning: '#F59E0B'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #030712; color: #F8FAFC; overflow-x: hidden; }
+        .text-gradient { background: linear-gradient(135deg, #00F0FF 0%, #3B82F6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .text-gradient-accent { background: linear-gradient(135deg, #8B5CF6 0%, #00F0FF 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .bg-gradient-glass { background: linear-gradient(145deg, rgba(15, 23, 42, 0.8) 0%, rgba(3, 7, 18, 0.9) 100%); backdrop-filter: blur(16px); }
+        .border-glow { border: 1px solid rgba(0, 240, 255, 0.15); box-shadow: inset 0 0 20px rgba(0, 240, 255, 0.02), 0 0 15px rgba(0, 240, 255, 0.05); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .border-glow:hover { border-color: rgba(0, 240, 255, 0.6); box-shadow: inset 0 0 20px rgba(0, 240, 255, 0.05), 0 0 30px rgba(0, 240, 255, 0.2); transform: translateY(-4px); }
+        .border-glow-cyan { border: 1px solid rgba(6, 182, 212, 0.2); box-shadow: inset 0 0 20px rgba(6, 182, 212, 0.02), 0 0 15px rgba(6, 182, 212, 0.05); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .border-glow-cyan:hover { border-color: rgba(6, 182, 212, 0.6); box-shadow: inset 0 0 20px rgba(6, 182, 212, 0.05), 0 0 30px rgba(6, 182, 212, 0.2); transform: translateY(-4px); }
+        .bg-grid-pattern { background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%231E293B' fill-opacity='0.4' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E"); }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #030712; }
+        ::-webkit-scrollbar-thumb { background: #1E293B; border-radius: 4px; }
+        .nav-glass { background: rgba(3, 7, 18, 0.85); backdrop-filter: blur(20px); }
+
+        /* ===== LIGHT THEME ===== */
+        body.theme-light { background-color: #F8FAFC; color: #1E293B; }
+        body.theme-light .bg-grid-pattern { background-image: none !important; }
+        body.theme-light .text-gradient { background: linear-gradient(135deg, #0284C7 0%, #2563EB 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        body.theme-light .text-gradient-accent { background: linear-gradient(135deg, #7C3AED 0%, #0284C7 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        body.theme-light .text-gradient-red { background: linear-gradient(135deg, #DC2626 0%, #EA580C 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        body.theme-light .nav-glass { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px); border-color: #E2E8F0; }
+        body.theme-light .bg-gradient-glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(16px); }
+        body.theme-light .border-glow { border-color: rgba(0, 0, 0, 0.08); box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04); }
+        body.theme-light .border-glow:hover { border-color: rgba(37, 99, 235, 0.3); box-shadow: 0 4px 20px rgba(37, 99, 235, 0.1); }
+        body.theme-light .border-glow-blue { border-color: rgba(0, 0, 0, 0.08); box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+        body.theme-light .border-glow-blue:hover { border-color: rgba(37, 99, 235, 0.3); box-shadow: 0 4px 20px rgba(37, 99, 235, 0.1); }
+        body.theme-light .border-glow-accent { border-color: rgba(0, 0, 0, 0.08); box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+        body.theme-light .border-glow-accent:hover { border-color: rgba(124, 58, 237, 0.3); box-shadow: 0 4px 20px rgba(124, 58, 237, 0.1); }
+        body.theme-light .border-glow-warning { border-color: rgba(0, 0, 0, 0.08); box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+        body.theme-light .border-glow-warning:hover { border-color: rgba(217, 119, 6, 0.3); box-shadow: 0 4px 20px rgba(217, 119, 6, 0.1); }
+        body.theme-light .border-glow-success { border-color: rgba(0, 0, 0, 0.08); box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+        body.theme-light .border-glow-success:hover { border-color: rgba(5, 150, 105, 0.3); box-shadow: 0 4px 20px rgba(5, 150, 105, 0.1); }
+        body.theme-light .border-glow-cyan { border-color: rgba(0, 0, 0, 0.08); box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+        body.theme-light .border-glow-cyan:hover { border-color: rgba(6, 182, 212, 0.3); box-shadow: 0 4px 20px rgba(6, 182, 212, 0.1); }
+        body.theme-light .border-glow-red { border-color: rgba(0, 0, 0, 0.08); box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+        body.theme-light .border-glow-red:hover { border-color: rgba(220, 38, 38, 0.3); box-shadow: 0 4px 20px rgba(220, 38, 38, 0.1); }
+        body.theme-light .text-white { color: #0F172A; }
+        body.theme-light .text-slate-300 { color: #475569; }
+        body.theme-light .text-slate-400 { color: #64748B; }
+        body.theme-light .text-slate-500 { color: #94A3B8; }
+        body.theme-light .text-slate-600 { color: #CBD5E1; }
+        body.theme-light .bg-brand-card, body.theme-light .bg-brand-card\/60, body.theme-light .bg-brand-card\/80, body.theme-light .bg-brand-card\/40 { background-color: #FFFFFF; }
+        body.theme-light .bg-brand-surface, body.theme-light .bg-brand-surface\/60, body.theme-light .bg-brand-surface\/30 { background-color: #F1F5F9; }
+        body.theme-light .bg-brand-dark { background-color: #F8FAFC; }
+        body.theme-light .bg-\[\#070D18\] { background-color: #F1F5F9; }
+        body.theme-light .bg-\[\#040914\] { background-color: #FFFFFF; }
+        body.theme-light .bg-\[\#0B1221\] { background-color: #F8FAFC; }
+        body.theme-light .border-slate-800, body.theme-light .border-slate-800\/60 { border-color: #E2E8F0; }
+        body.theme-light .border-slate-700, body.theme-light .border-slate-700\/50, body.theme-light .border-slate-700\/40, body.theme-light .border-slate-700\/30 { border-color: #E2E8F0; }
+        body.theme-light .divide-slate-700\/30 > :not([hidden]) ~ :not([hidden]) { border-color: #E2E8F0; }
+        body.theme-light .hover\:text-white:hover { color: #1E40AF; }
+        body.theme-light .hover\:bg-slate-800:hover { background-color: #F1F5F9; }
+        body.theme-light .hover\:bg-brand-surface\/30:hover { background-color: #F8FAFC; }
+        body.theme-light footer { background-color: #F8FAFC; border-color: #E2E8F0; }
+        body.theme-light footer .text-white { color: #0F172A; }
+        body.theme-light ::-webkit-scrollbar-track { background: #F8FAFC; }
+        body.theme-light ::-webkit-scrollbar-thumb { background: #CBD5E1; }
+        body.theme-light code { background-color: #F1F5F9; color: #1E293B; }
+
+        body.theme-light .border-slate-700\/40 { border-color: #E2E8F0; }
+        body.theme-light a.text-slate-400 { color: #64748B; }
+        body.theme-light a.text-slate-400:hover { color: #1E40AF; background-color: #F1F5F9; }
+    </style>
+</head>
+<body class="antialiased bg-grid-pattern min-h-screen">
+
+    <!-- ==================== TOP NAVIGATION ==================== -->
+    <nav class="nav-glass sticky top-0 z-50 border-b border-slate-800/60">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center h-14 gap-1 overflow-x-auto">
+                <a href="index.html" class="text-lg font-extrabold tracking-tight mr-4 whitespace-nowrap shrink-0">
+                    <span class="text-gradient">IT</span><span class="text-white">Hub</span>
+                </a>
+                <a href="index.html" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors whitespace-nowrap">首页</a>
+                <a href="platform.html" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors whitespace-nowrap">平台架构</a>
+                <a href="gemmb.html" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors whitespace-nowrap">GEMMB 监控</a>
+                <a href="cmdb.html" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors whitespace-nowrap">CMDB 配置</a>
+                <a href="itsm.html" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors whitespace-nowrap">ITSM 服务</a>
+                <a href="automation.html" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors whitespace-nowrap">自动化 / AI</a>
+                <a href="integration.html" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-cyan-500/20 text-cyan-400 whitespace-nowrap">集成框架</a>
+                <a href="noc.html" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors whitespace-nowrap">统一运营服务</a>
+                <div class="ml-auto shrink-0 flex items-center gap-1 border-l border-slate-700/40 pl-3">
+                    <a href="integration.html" class="px-2 py-1 rounded text-[10px] font-semibold bg-brand-primary/20 text-brand-primary font-bold transition-colors whitespace-nowrap">简</a>
+                    <a href="tw/integration.html" class="px-2 py-1 rounded text-[10px] font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition-colors whitespace-nowrap">繁</a>
+                    <a href="EN/integration.html" class="px-2 py-1 rounded text-[10px] font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition-colors whitespace-nowrap">EN</a>
+                </div>
+                <button onclick="toggleTheme()" class="ml-auto shrink-0 w-8 h-8 rounded-lg flex items-center justify-center border border-slate-700/40 hover:border-brand-primary/40 transition-colors" title="切换主题" id="theme-toggle">
+                    <svg id="icon-moon" class="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                    <svg id="icon-sun" class="w-4 h-4 text-yellow-500 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ==================== HERO ==================== -->
+    <header class="relative pt-20 pb-16 overflow-hidden">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[1200px] h-[600px] opacity-15 pointer-events-none">
+            <div class="absolute inset-0 bg-gradient-to-br from-cyan-500 via-cyan-600 to-brand-primary blur-[150px] rounded-full mix-blend-screen"></div>
+        </div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="inline-flex items-center space-x-3 bg-brand-surface border border-slate-700/60 rounded-full px-5 py-2 mb-6 shadow-lg">
+                <span class="relative flex h-2.5 w-2.5">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-400"></span>
+                </span>
+                <span class="text-[10px] md:text-xs font-bold tracking-[0.2em] text-slate-300 uppercase whitespace-nowrap">Open Ecosystem & Integration Bus</span>
+            </div>
+
+            <h1 class="text-4xl md:text-6xl lg:text-7xl font-black tracking-tight mb-6 leading-[1.1]">
+                集成框架 —<br><span class="text-gradient">开放生态对接</span>
+            </h1>
+            <p class="text-lg md:text-xl text-slate-400 mb-12 leading-relaxed max-w-4xl mx-auto">
+                由原生 C# .NET Core 执行引擎驱动的工业级集成总线，提供事务状态记忆、双向同步和事务级错误处理。贯通所有企业 IT 系统孤岛。<strong class="text-white">2,100+ REST APIs，100% 可编程。</strong>
+            </p>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+                <div class="bg-gradient-glass border-glow-cyan rounded-2xl p-5 text-center">
+                    <div class="text-3xl md:text-4xl font-black text-cyan-400">2,100+</div>
+                    <div class="text-[10px] text-slate-500 uppercase tracking-wider font-bold mt-1">标准化 APIs</div>
+                </div>
+                <div class="bg-gradient-glass border-glow-cyan rounded-2xl p-5 text-center">
+                    <div class="text-3xl md:text-4xl font-black text-brand-secondary">100%</div>
+                    <div class="text-[10px] text-slate-500 uppercase tracking-wider font-bold mt-1">功能可编程</div>
+                </div>
+                <div class="bg-gradient-glass border-glow-cyan rounded-2xl p-5 text-center">
+                    <div class="text-3xl md:text-4xl font-black text-brand-accent">OAuth 2.0</div>
+                    <div class="text-[10px] text-slate-500 uppercase tracking-wider font-bold mt-1">原生 SSO</div>
+                </div>
+                <div class="bg-gradient-glass border-glow-cyan rounded-2xl p-5 text-center">
+                    <div class="text-3xl md:text-4xl font-black text-brand-success">Zero-Drop</div>
+                    <div class="text-[10px] text-slate-500 uppercase tracking-wider font-bold mt-1">事务可靠性</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== BREADCRUMB ==================== -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div class="flex items-center gap-2 text-xs text-slate-500">
+            <a href="index.html" class="hover:text-cyan-400 transition-colors">首页</a>
+            <span>/</span>
+            <span class="text-cyan-400 font-semibold">集成框架</span>
+        </div>
+    </div>
+
+    <!-- ==================== INTEGRATION BUS ==================== -->
+    <section class="py-24 border-t border-slate-800 bg-[#070D18] relative overflow-hidden">
+        <div class="absolute left-0 top-1/4 w-[500px] h-[500px] bg-cyan-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16">
+                <div class="inline-flex items-center space-x-2 bg-brand-surface px-4 py-2 rounded-lg mb-4 border border-slate-700 shadow-md">
+                    <span class="text-cyan-400 font-bold tracking-widest text-xs uppercase">集成总线</span>
+                </div>
+                <h2 class="text-3xl md:text-5xl font-black mb-6 tracking-tight">集成总线<span class="text-gradient">架构</span></h2>
+                <p class="text-lg text-slate-400 max-w-4xl mx-auto">ITHub 本身即是一个高韧性的集成总线。所有外部系统对接通过统一的 API Gateway 和 Integration Bus 进行，确保数据一致性、事务安全和可审计性。</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-gradient-glass border-glow-cyan rounded-2xl p-8">
+                    <div class="w-10 h-10 rounded-lg bg-cyan-500/20 flex items-center justify-center border border-cyan-500/40 mb-4">
+                        <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                    </div>
+                    <h4 class="text-sm font-extrabold text-white mb-2">双向生命周期编排</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">控制第三方系统工单全生命周期：即时创建、跨平台 CI 映射、微秒级状态挂起等待客户/供应商输入。深度 SDK 级双向控制。</p>
+                </div>
+
+                <div class="bg-gradient-glass border-glow-cyan rounded-2xl p-8">
+                    <div class="w-10 h-10 rounded-lg bg-brand-success/20 flex items-center justify-center border border-brand-success/40 mb-4">
+                        <svg class="w-5 h-5 text-brand-success" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                    </div>
+                    <h4 class="text-sm font-extrabold text-white mb-2">事务安全与微状态记忆</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">永不丢失关键编排事件。追踪 Acknowledged 和 Errored 状态，加密运行时记忆袋保持会话连续性，智能增量轮询保护目标系统。</p>
+                </div>
+
+                <div class="bg-gradient-glass border-glow-cyan rounded-2xl p-8">
+                    <div class="w-10 h-10 rounded-lg bg-brand-accent/20 flex items-center justify-center border border-brand-accent/40 mb-4">
+                        <svg class="w-5 h-5 text-brand-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
+                    </div>
+                    <h4 class="text-sm font-extrabold text-white mb-2">跨平台拓扑映射</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">自动匹配跨厂商配置信息，基于唯一外部标识符关联下游硬件告警至企业服务边界，零人工数据录入。</p>
+                </div>
+
+                <div class="bg-gradient-glass border-glow-cyan rounded-2xl p-8">
+                    <div class="w-10 h-10 rounded-lg bg-brand-secondary/20 flex items-center justify-center border border-brand-secondary/40 mb-4">
+                        <svg class="w-5 h-5 text-brand-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"></path></svg>
+                    </div>
+                    <h4 class="text-sm font-extrabold text-white mb-2">动态工单负载均衡</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">Sign-In Perception 算法持续监测在线工程师工作负载，新工单智能分配给最低负载人员，确保高可用和零瓶颈。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== VERIFIED INTEGRATIONS ==================== -->
+    <section class="py-24 border-t border-slate-800 bg-[#040914] relative overflow-hidden">
+        <div class="absolute right-0 top-1/3 w-[500px] h-[500px] bg-brand-secondary/5 rounded-full blur-[120px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16">
+                <div class="inline-flex items-center space-x-2 bg-brand-surface px-4 py-2 rounded-lg mb-4 border border-slate-700 shadow-md">
+                    <span class="text-brand-secondary font-bold tracking-widest text-xs uppercase">已验证集成</span>
+                </div>
+                <h2 class="text-3xl md:text-5xl font-black mb-6 tracking-tight">已验证<span class="text-gradient-accent">集成清单</span></h2>
+                <p class="text-lg text-slate-400 max-w-4xl mx-auto">以下集成方案均经过严格测试验证，可直接用于生产环境。</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Grafana -->
+                <div class="bg-gradient-glass border-glow rounded-2xl p-5 flex items-start gap-4">
+                    <div class="w-10 h-10 rounded-xl bg-brand-warning/20 flex items-center justify-center border border-brand-warning/40 shrink-0">
+                        <svg class="w-5 h-5 text-brand-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                    </div>
+                    <div>
+                        <h5 class="text-sm font-bold text-white">Grafana v12.1.0</h5>
+                        <p class="text-xs text-slate-400 mt-1">SSO 集成，OAuth2/OIDC，仪表盘嵌入</p>
+                    </div>
+                </div>
+
+                <!-- ThousandEyes -->
+                <div class="bg-gradient-glass border-glow rounded-2xl p-5 flex items-start gap-4">
+                    <div class="w-10 h-10 rounded-xl bg-brand-secondary/20 flex items-center justify-center border border-brand-secondary/40 shrink-0">
+                        <svg class="w-5 h-5 text-brand-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                    </div>
+                    <div>
+                        <h5 class="text-sm font-bold text-white">Cisco ThousandEyes</h5>
+                        <p class="text-xs text-slate-400 mt-1">REST API，批量配置，DEM 数据导入</p>
+                    </div>
+                </div>
+
+                <!-- Hand -->
+                <div class="bg-gradient-glass border-glow rounded-2xl p-5 flex items-start gap-4">
+                    <div class="w-10 h-10 rounded-xl bg-brand-accent/20 flex items-center justify-center border border-brand-accent/40 shrink-0">
+                        <svg class="w-5 h-5 text-brand-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                    </div>
+                    <div>
+                        <h5 class="text-sm font-bold text-white">Hand 汉得 ITSM</h5>
+                        <p class="text-xs text-slate-400 mt-1">原生双向集成，字段级同步，工单生命周期</p>
+                    </div>
+                </div>
+
+                <!-- ServiceNow -->
+                <div class="bg-gradient-glass border-glow rounded-2xl p-5 flex items-start gap-4">
+                    <div class="w-10 h-10 rounded-xl bg-brand-success/20 flex items-center justify-center border border-brand-success/40 shrink-0">
+                        <svg class="w-5 h-5 text-brand-success" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                    </div>
+                    <div>
+                        <h5 class="text-sm font-bold text-white">ServiceNow</h5>
+                        <p class="text-xs text-slate-400 mt-1">完整生命周期对接，状态实时同步</p>
+                    </div>
+                </div>
+
+                <!-- Splunk -->
+                <div class="bg-gradient-glass border-glow rounded-2xl p-5 flex items-start gap-4">
+                    <div class="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center border border-red-500/40 shrink-0">
+                        <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                    </div>
+                    <div>
+                        <h5 class="text-sm font-bold text-white">Splunk</h5>
+                        <p class="text-xs text-slate-400 mt-1">安全告警集成，事件关联分析</p>
+                    </div>
+                </div>
+
+                <!-- Syslog/NetFlow -->
+                <div class="bg-gradient-glass border-glow rounded-2xl p-5 flex items-start gap-4">
+                    <div class="w-10 h-10 rounded-xl bg-cyan-500/20 flex items-center justify-center border border-cyan-500/40 shrink-0">
+                        <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M12 5l7 7-7 7"></path></svg>
+                    </div>
+                    <div>
+                        <h5 class="text-sm font-bold text-white">Syslog / NetFlow Relay</h5>
+                        <p class="text-xs text-slate-400 mt-1">日志加密转发，合规冷备，流量分析</p>
+                    </div>
+                </div>
+
+                <!-- CMDB-ITSM -->
+                <div class="bg-gradient-glass border-glow rounded-2xl p-5 flex items-start gap-4">
+                    <div class="w-10 h-10 rounded-xl bg-slate-500/20 flex items-center justify-center border border-slate-500/40 shrink-0">
+                        <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                    </div>
+                    <div>
+                        <h5 class="text-sm font-bold text-white">CMDB-ITSM 连接器</h5>
+                        <p class="text-xs text-slate-400 mt-1">CI 数据双向同步，变更管理集成</p>
+                    </div>
+                </div>
+
+                <!-- HTTP Client -->
+                <div class="bg-gradient-glass border-glow rounded-2xl p-5 flex items-start gap-4">
+                    <div class="w-10 h-10 rounded-xl bg-pink-500/20 flex items-center justify-center border border-pink-500/40 shrink-0">
+                        <svg class="w-5 h-5 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                    </div>
+                    <div>
+                        <h5 class="text-sm font-bold text-white">HTTP Client 框架</h5>
+                        <p class="text-xs text-slate-400 mt-1">通用 REST API 连接器，SSL/TLS、重试</p>
+                    </div>
+                </div>
+
+                <!-- SSO -->
+                <div class="bg-gradient-glass border-glow rounded-2xl p-5 flex items-start gap-4">
+                    <div class="w-10 h-10 rounded-xl bg-brand-accent/20 flex items-center justify-center border border-brand-accent/40 shrink-0">
+                        <svg class="w-5 h-5 text-brand-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg>
+                    </div>
+                    <div>
+                        <h5 class="text-sm font-bold text-white">SSO 认证模块</h5>
+                        <p class="text-xs text-slate-400 mt-1">OAuth2 / OIDC / SAML，统一身份认证</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== API ARCHITECTURE ==================== -->
+    <section class="py-24 border-t border-slate-800 bg-[#070D18] relative overflow-hidden">
+        <div class="absolute right-0 top-1/4 w-[500px] h-[500px] bg-brand-accent/5 rounded-full blur-[120px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16">
+                <div class="inline-flex items-center space-x-2 bg-brand-surface px-4 py-2 rounded-lg mb-4 border border-slate-700 shadow-md">
+                    <span class="text-brand-accent font-bold tracking-widest text-xs uppercase">API 架构</span>
+                </div>
+                <h2 class="text-3xl md:text-5xl font-black mb-6 tracking-tight">API <span class="text-gradient-accent">架构</span></h2>
+                <p class="text-lg text-slate-400 max-w-4xl mx-auto">ITHub 的每一个微状态均可通过 RESTful API 编程访问。API 覆盖安全、CMDB、Poller 配置、服务管理等所有模块。</p>
+            </div>
+
+            <div class="bg-gradient-glass border border-slate-700/40 rounded-2xl overflow-hidden shadow-xl mb-8">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="bg-brand-surface/80 border-b border-slate-700/60">
+                                <th class="px-6 py-4 text-left text-xs font-bold text-cyan-400 uppercase tracking-wider">API 领域</th>
+                                <th class="px-6 py-4 text-left text-xs font-bold text-cyan-400 uppercase tracking-wider">功能覆盖</th>
+                                <th class="px-6 py-4 text-left text-xs font-bold text-cyan-400 uppercase tracking-wider">典型用途</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-700/30">
+                            <tr class="hover:bg-brand-surface/30 transition-colors">
+                                <td class="px-6 py-3.5 font-semibold text-white">Security APIs</td>
+                                <td class="px-6 py-3.5 text-slate-400">用户管理、权限控制、SSO 配置</td>
+                                <td class="px-6 py-3.5 text-slate-500">自动化账户管理、SSO 集成</td>
+                            </tr>
+                            <tr class="hover:bg-brand-surface/30 transition-colors">
+                                <td class="px-6 py-3.5 font-semibold text-white">CMDB APIs</td>
+                                <td class="px-6 py-3.5 text-slate-400">CI 增删改查、关系管理、属性操作</td>
+                                <td class="px-6 py-3.5 text-slate-500">外部系统集成、自动化配置管理</td>
+                            </tr>
+                            <tr class="hover:bg-brand-surface/30 transition-colors">
+                                <td class="px-6 py-3.5 font-semibold text-white">Poller APIs</td>
+                                <td class="px-6 py-3.5 text-slate-400">Poller 配置、设备管理、采集策略</td>
+                                <td class="px-6 py-3.5 text-slate-500">自动化部署、远程配置下发</td>
+                            </tr>
+                            <tr class="hover:bg-brand-surface/30 transition-colors">
+                                <td class="px-6 py-3.5 font-semibold text-white">ITSM APIs</td>
+                                <td class="px-6 py-3.5 text-slate-400">工单 CRUD、SLA 查询、报表数据</td>
+                                <td class="px-6 py-3.5 text-slate-500">外部工单系统对接、数据导出</td>
+                            </tr>
+                            <tr class="hover:bg-brand-surface/30 transition-colors">
+                                <td class="px-6 py-3.5 font-semibold text-white">Monitoring APIs</td>
+                                <td class="px-6 py-3.5 text-slate-400">指标查询、告警管理、看板数据</td>
+                                <td class="px-6 py-3.5 text-slate-500">自定义看板、告警集成</td>
+                            </tr>
+                            <tr class="hover:bg-brand-surface/30 transition-colors">
+                                <td class="px-6 py-3.5 font-semibold text-white">Integration APIs</td>
+                                <td class="px-6 py-3.5 text-slate-400">连接器管理、工作流触发</td>
+                                <td class="px-6 py-3.5 text-slate-500">自定义集成、自动化流程</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Third-party methods -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-brand-card/40 border border-slate-700/30 rounded-xl p-5 text-center">
+                    <div class="text-xl font-black text-brand-secondary mb-1">REST API</div>
+                    <p class="text-xs text-slate-400">2,100+ 标准化端点，JSON 数据格式</p>
+                </div>
+                <div class="bg-brand-card/40 border border-slate-700/30 rounded-xl p-5 text-center">
+                    <div class="text-xl font-black text-brand-accent mb-1">SOAP</div>
+                    <p class="text-xs text-slate-400">企业级 XML 协议，兼容传统系统</p>
+                </div>
+                <div class="bg-brand-card/40 border border-slate-700/30 rounded-xl p-5 text-center">
+                    <div class="text-xl font-black text-brand-success mb-1">Webhook</div>
+                    <p class="text-xs text-slate-400">事件驱动推送，实时数据同步</p>
+                </div>
+            </div>
+
+            <div class="mt-6 bg-gradient-to-r from-cyan-500/10 to-brand-secondary/10 border border-cyan-500/20 rounded-2xl p-6 text-center">
+                <p class="text-sm text-slate-300"><strong class="text-white">基础设施即代码 (IaC)：</strong>所有配置均可通过 API 实现自动化管理，支持将 ITHub 纳入企业的 CI/CD 流水线和 GitOps 工作流。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="py-16 text-center bg-brand-dark border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-lg font-extrabold text-white mb-4"><span class="text-gradient">IT</span>Hub 平台</div>
+            <p class="text-sm text-slate-500 mb-6">Logicalis 网赢 — 全球 ICT 解决方案与管理服务提供商 · Architects of Change</p>
+            <div class="flex flex-wrap justify-center gap-4 mb-8">
+                <a href="platform.html" class="text-xs text-slate-400 hover:text-slate-300 transition-colors">平台架构</a>
+                <a href="gemmb.html" class="text-xs text-slate-400 hover:text-brand-secondary transition-colors">GEMMB 监控</a>
+                <a href="cmdb.html" class="text-xs text-slate-400 hover:text-brand-warning transition-colors">CMDB 配置</a>
+                <a href="itsm.html" class="text-xs text-slate-400 hover:text-brand-accent transition-colors">ITSM 服务</a>
+                <a href="automation.html" class="text-xs text-slate-400 hover:text-brand-success transition-colors">自动化 / AI</a>
+                <a href="integration.html" class="text-xs text-slate-400 hover:text-cyan-400 transition-colors">集成框架</a>
+                <a href="noc.html" class="text-xs text-slate-400 hover:text-red-400 transition-colors">统一运营服务</a>
+            </div>
+            <p class="text-[10px] font-bold text-slate-600 uppercase tracking-widest">&copy; 2026 Logicalis 中国 · 保留所有权利</p>
+        </div>
+    </footer>
+
+
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            const isLight = body.classList.toggle('theme-light');
+            body.classList.toggle('bg-grid-pattern', !isLight);
+            localStorage.setItem('ithub-theme', isLight ? 'light' : 'dark');
+            document.getElementById('icon-moon').classList.toggle('hidden', isLight);
+            document.getElementById('icon-sun').classList.toggle('hidden', !isLight);
+        }
+        (function() {
+            if (localStorage.getItem('ithub-theme') === 'light') {
+                document.body.classList.add('theme-light');
+                document.body.classList.remove('bg-grid-pattern');
+                var moon = document.getElementById('icon-moon');
+                var sun = document.getElementById('icon-sun');
+                if (moon && sun) { moon.classList.add('hidden'); sun.classList.remove('hidden'); }
+            }
+        })();
+    </script>
+</body>
+</html>
